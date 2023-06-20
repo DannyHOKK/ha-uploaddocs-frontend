@@ -11,20 +11,36 @@ import {
   MDBCheckbox,
 } from "mdb-react-ui-kit";
 import Register from "../register/Register";
+import AuthService from "../../api/AuthService";
 
 function Login() {
   const inputRef = useRef();
+  const [user, setUser] = useState({
+    email: "",
+    password: "",
+  });
   const [justifyActive, setJustifyActive] = useState("tab1");
 
   useEffect(() => {
     inputRef.current.focus();
   }, []);
 
+  const submitHandler = (e) => {
+    AuthService.loginUser(user);
+  };
+
+  const changeHandler = (e) => {
+    const { name, value } = e.target;
+    setUser((e) => ({
+      ...user,
+      [name]: value,
+    }));
+  };
+
   const handleJustifyClick = (value) => {
     if (value === justifyActive) {
       return;
     }
-
     setJustifyActive(value);
   };
 
@@ -56,32 +72,39 @@ function Login() {
       <MDBTabsContent>
         <MDBTabsPane show={justifyActive === "tab1"}>
           <div className="text-center mb-3"></div>
-
-          <MDBInput
-            wrapperClass="mb-4"
-            ref={inputRef}
-            label="Email address"
-            id="form1"
-            type="email"
-          />
-          <MDBInput
-            wrapperClass="mb-4"
-            label="Password"
-            id="form2"
-            type="password"
-          />
-
-          <div className="d-flex justify-content-between mx-4 mb-4">
-            <MDBCheckbox
-              name="flexCheck"
-              value=""
-              id="flexCheckDefault"
-              label="Remember me"
+          <form onSubmit={(e) => submitHandler(e)}>
+            <MDBInput
+              wrapperClass="mb-4"
+              ref={inputRef}
+              label="Email address"
+              id="form1"
+              name="email"
+              type="email"
+              value={user.email}
+              onChange={changeHandler}
             />
-            <a href="!#">Forgot password?</a>
-          </div>
+            <MDBInput
+              wrapperClass="mb-4"
+              label="Password"
+              name="password"
+              id="form2"
+              type="password"
+              value={user.password}
+              onChange={changeHandler}
+            />
 
-          <MDBBtn className="mb-4 w-100">Sign in</MDBBtn>
+            <div className="d-flex justify-content-between mx-4 mb-4">
+              <MDBCheckbox
+                name="flexCheck"
+                value=""
+                id="flexCheckDefault"
+                label="Remember me"
+              />
+              <a href="!#">Forgot password?</a>
+            </div>
+
+            <MDBBtn className="mb-4 w-100">Sign in</MDBBtn>
+          </form>
           <p className="text-center">
             Not a member?
             <a
