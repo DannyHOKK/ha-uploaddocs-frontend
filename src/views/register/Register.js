@@ -1,18 +1,19 @@
 import React, { useEffect, useRef, useState } from "react";
+// import { Link, useNavigate } from "react-router-dom";
 import { MDBBtn, MDBInput, MDBCheckbox } from "mdb-react-ui-kit";
 import AuthService from "../../api/AuthService";
 
 function Register() {
   const inputRef = useRef();
   const [validPwd, setValidPwd] = useState("");
-  const [checkbox, setCheckbox] = useState("");
   const [errorMsg, setErrorMsg] = useState("");
   const [user, setUser] = useState({
     name: "",
     username: "",
     email: "",
-    pwd: "",
+    password: "",
   });
+  // const navigation = useNavigate();
 
   const PWD_REGEX = /^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{6,16}$/;
   const EMAIL_REGEX =
@@ -29,7 +30,7 @@ function Register() {
 
   const changeHandler = (e) => {
     const { name, value } = e.target;
-    if (name == "validPwd") {
+    if (name === "validPwd") {
       setValidPwd(value);
     } else {
       setUser({
@@ -45,11 +46,20 @@ function Register() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (!errorMsg) {
-      console.log("typing ok");
-      //   AuthService.registerUser(user);
-    }
     setErrorMsg(userValidator(user));
+    if (Object.keys(errorMsg).length === 0) {
+      AuthService.registerUser(user)
+        .then((res) => {
+          if (res && res.data) {
+            console.log(res.data);
+          }
+        })
+        .catch((error) => {
+          console.log("ERROR: ");
+          console.log(error);
+        });
+    }
+    console.log("ckick success");
   };
 
   const userValidator = (data) => {
@@ -63,13 +73,13 @@ function Register() {
     if (!EMAIL_REGEX.test(data.email)) {
       msg.email = "Email is required";
     }
-    if (!user.pwd) {
+    if (!user.password) {
       msg.pwd = "Password is required";
     }
-    if (user.pwd !== validPwd) {
+    if (user.password !== validPwd) {
       msg.pwd = "Password not same ";
     }
-    if (!PWD_REGEX.test(user.pwd)) {
+    if (!PWD_REGEX.test(user.password)) {
       msg.validPwd =
         "Password must contain a special character and greater than 8 characters";
     }
@@ -126,10 +136,10 @@ function Register() {
       <MDBInput
         wrapperClass="mb-4"
         label="Password"
-        name="pwd"
+        name="password"
         id="form1"
         type="password"
-        value={user.pwd}
+        value={user.password}
         onChange={(e) => {
           changeHandler(e);
         }}
@@ -147,6 +157,8 @@ function Register() {
       />
 
       <p className=" alert-danger">{errorMsg.pwd}</p>
+
+      <p className=" alert-danger">{errorMsg.status}</p>
 
       <div className="d-flex justify-content-center mb-4">
         <MDBCheckbox
