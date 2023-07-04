@@ -6,12 +6,12 @@ import "@fortawesome/fontawesome-free/css/all.min.css";
 import reportWebVitals from "./reportWebVitals";
 import Navbar from "./layout/navbar/navbar";
 import Login from "./views/login/login";
+import App from "./App";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
-    <Navbar />
-    <Login />
+    <App />
   </React.StrictMode>
 );
 

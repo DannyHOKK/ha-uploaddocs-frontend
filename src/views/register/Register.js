@@ -1,19 +1,23 @@
 import React, { useEffect, useRef, useState } from "react";
-// import { Link, useNavigate } from "react-router-dom";
 import { MDBBtn, MDBInput, MDBCheckbox } from "mdb-react-ui-kit";
 import AuthService from "../../api/AuthService";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function Register() {
   const inputRef = useRef();
   const [validPwd, setValidPwd] = useState("");
   const [errorMsg, setErrorMsg] = useState("");
+  const [status, setStatus] = useState("");
+  const [submitButton, setSubmitButton] = useState(false);
+  const [success, setSuccess] = useState(false);
+
   const [user, setUser] = useState({
     name: "",
     username: "",
     email: "",
     password: "",
   });
-  // const navigation = useNavigate();
 
   const PWD_REGEX = /^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{6,16}$/;
   const EMAIL_REGEX =
@@ -22,11 +26,6 @@ function Register() {
   useEffect(() => {
     inputRef.current.focus();
   }, []);
-
-  //   useEffect(() => {
-  //     setErrorMsg(userValidator(user));
-  //     console.log("userValidator is work");
-  //   }, [user]);
 
   const changeHandler = (e) => {
     const { name, value } = e.target;
@@ -42,16 +41,27 @@ function Register() {
       ...errorMsg,
       [name]: "",
     }));
+    console.log(errorMsg.name);
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    setErrorMsg(userValidator(user));
-    if (Object.keys(errorMsg).length === 0) {
+    setStatus("");
+    const msg = userValidator(user);
+    console.log(Object.keys(msg).length);
+    if (Object.keys(msg).length === 0) {
       AuthService.registerUser(user)
         .then((res) => {
+          console.log("then");
+          console.log(res.data.code);
           if (res && res.data) {
-            console.log(res.data);
+            if (res.data.code === -1) {
+              setStatus(res.data.msg);
+              console.log(res.data.msg);
+            } else if (res.data.code === 0) {
+              notify();
+              setSuccess(true);
+            }
           }
         })
         .catch((error) => {
@@ -59,7 +69,6 @@ function Register() {
           console.log(error);
         });
     }
-    console.log("ckick success");
   };
 
   const userValidator = (data) => {
@@ -83,93 +92,122 @@ function Register() {
       msg.validPwd =
         "Password must contain a special character and greater than 8 characters";
     }
+
+    setErrorMsg(msg);
     return msg;
   };
 
+  const handleCheckboxChange = () => {
+    setSubmitButton(!submitButton);
+  };
+
+  const notify = () => {
+    toast.success("🦄 Wow so easy!", {
+      position: "top-center",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "light",
+    });
+  };
+
   return (
-    <form
-      onSubmit={(e) => {
-        handleSubmit(e);
-      }}
-    >
-      <div className="text-center mb-3"></div>
-      <p className=" alert-danger">{errorMsg.name}</p>
-      <MDBInput
-        wrapperClass="mb-4"
-        ref={inputRef}
-        label="Name"
-        name="name"
-        id="form1"
-        type="text"
-        autoComplete="on"
-        value={user.name}
-        onChange={(e) => {
-          changeHandler(e);
-        }}
-      />
-      <p className=" alert-danger">{errorMsg.username}</p>
-      <MDBInput
-        wrapperClass="mb-4"
-        label="Username"
-        name="username"
-        id="form1"
-        type="text"
-        autoComplete="on"
-        value={user.username}
-        onChange={(e) => {
-          changeHandler(e);
-        }}
-      />
-      <p className=" alert-danger">{errorMsg.email}</p>
-      <MDBInput
-        wrapperClass="mb-4"
-        label="Email"
-        name="email"
-        id="form1"
-        type="email"
-        autoComplete="on"
-        value={user.email}
-        onChange={(e) => {
-          changeHandler(e);
-        }}
-      />
-      <MDBInput
-        wrapperClass="mb-4"
-        label="Password"
-        name="password"
-        id="form1"
-        type="password"
-        value={user.password}
-        onChange={(e) => {
-          changeHandler(e);
-        }}
-      />
-      <MDBInput
-        wrapperClass="mb-4"
-        label="Repeat Your Password"
-        name="validPwd"
-        id="form1"
-        type="password"
-        value={validPwd}
-        onChange={(e) => {
-          changeHandler(e);
-        }}
-      />
+    <>
+      {success ? (
+        window.location.reload()
+      ) : (
+        <form
+          onSubmit={(e) => {
+            handleSubmit(e);
+          }}
+        >
+          <div className="text-center mb-3"></div>
+          <p className=" alert-danger">{errorMsg.name}</p>
+          <MDBInput
+            wrapperClass="mb-4"
+            ref={inputRef}
+            label="Name"
+            name="name"
+            id="form1"
+            type="text"
+            autoComplete="on"
+            value={user.name}
+            onChange={(e) => {
+              changeHandler(e);
+            }}
+          />
+          <p className=" alert-danger">{errorMsg.username}</p>
+          <MDBInput
+            wrapperClass="mb-4"
+            label="Username"
+            name="username"
+            id="form1"
+            type="text"
+            autoComplete="on"
+            value={user.username}
+            onChange={(e) => {
+              changeHandler(e);
+            }}
+          />
+          <p className=" alert-danger">{errorMsg.email}</p>
+          <MDBInput
+            wrapperClass="mb-4"
+            label="Email"
+            name="email"
+            id="form1"
+            type="email"
+            autoComplete="on"
+            value={user.email}
+            onChange={(e) => {
+              changeHandler(e);
+            }}
+          />
+          <MDBInput
+            wrapperClass="mb-4"
+            label="Password"
+            name="password"
+            id="form1"
+            type="password"
+            value={user.password}
+            onChange={(e) => {
+              changeHandler(e);
+            }}
+          />
+          <MDBInput
+            wrapperClass="mb-4"
+            label="Repeat Your Password"
+            name="validPwd"
+            id="form1"
+            type="password"
+            value={validPwd}
+            onChange={(e) => {
+              changeHandler(e);
+            }}
+          />
 
-      <p className=" alert-danger">{errorMsg.pwd}</p>
+          <p className=" alert-danger">{errorMsg.pwd}</p>
 
-      <p className=" alert-danger">{errorMsg.status}</p>
+          <p className=" alert-danger">{status}</p>
 
-      <div className="d-flex justify-content-center mb-4">
-        <MDBCheckbox
-          name="flexCheck"
-          id="flexCheckDefault"
-          label="I have read and agree to the terms"
-        />
-      </div>
+          <div className="d-flex justify-content-center mb-4">
+            <MDBCheckbox
+              name="flexCheck"
+              id="flexCheckDefault"
+              label="I have read and agree to the terms"
+              onChange={handleCheckboxChange}
+            />
+          </div>
 
-      <MDBBtn className="mb-4 w-100">Sign up</MDBBtn>
-    </form>
+          <MDBBtn className="mb-4 w-100" disabled={!submitButton}>
+            Sign up
+          </MDBBtn>
+          <ToastContainer />
+        </form>
+      )}
+    </>
   );
 }
 
