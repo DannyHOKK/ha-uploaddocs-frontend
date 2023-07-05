@@ -1,11 +1,11 @@
 import React, { useEffect, useRef, useState } from "react";
 import { MDBBtn, MDBInput, MDBCheckbox } from "mdb-react-ui-kit";
 import AuthService from "../../api/AuthService";
-import { Link, useNavigate } from "react-router-dom";
 
 function Login() {
   const inputRef = useRef();
-  const navigation = useNavigate();
+
+  const [errorMsg, setErrorMsg] = useState("");
   const [user, setUser] = useState({
     username: "",
     password: "",
@@ -16,9 +16,15 @@ function Login() {
   }, []);
 
   const submitHandler = (e) => {
-    AuthService.loginUser(user);
-    // window.location.reload();
-    navigation("/");
+    e.preventDefault();
+
+    AuthService.loginUser(user).then((res) => {
+      if (res.data.code === 0) {
+        window.location.reload();
+      } else {
+        setErrorMsg(res.data.msg);
+      }
+    });
   };
 
   const changeHandler = (e) => {
@@ -27,7 +33,6 @@ function Login() {
       ...user,
       [name]: value,
     }));
-    console.log(localStorage.getItem("userToken"));
   };
 
   return (
@@ -54,6 +59,7 @@ function Login() {
           onChange={changeHandler}
         />
 
+        <p className=" alert-danger">{errorMsg}</p>
         <div className="d-flex justify-content-between mx-4 mb-4">
           <MDBCheckbox
             name="flexCheck"

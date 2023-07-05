@@ -41,7 +41,6 @@ function Register() {
       ...errorMsg,
       [name]: "",
     }));
-    console.log(errorMsg.name);
   };
 
   const handleSubmit = (e) => {
@@ -102,7 +101,7 @@ function Register() {
   };
 
   const notify = () => {
-    toast.success("🦄 Wow so easy!", {
+    toast.success("Register Successfully", {
       position: "top-center",
       autoClose: 5000,
       hideProgressBar: false,

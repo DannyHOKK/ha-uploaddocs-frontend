@@ -9,14 +9,6 @@ const registerUser = (user) => {
     email: user.email,
     password: user.password,
   });
-  // .then((res) => {
-  //   // console.log("Response: ");
-  //   // console.log(res.data.msg);
-  // })
-  // .catch((error) => {
-  //   // console.log("ERROR: ");
-  //   // console.log(error);
-  // });
 };
 
 const loginUser = (user) => {
@@ -26,30 +18,45 @@ const loginUser = (user) => {
       password: user.password,
     })
     .then((res) => {
-      console.log("ready to entry");
+      console.log(user.username);
+      console.log(user.password);
+      console.log(res.data.code);
       if (res.data.code === 0) {
-        console.log("entry ed");
-        localStorage.setItem("jwt", JSON.stringify(res.data.data));
+        localStorage.setItem("jwt", JSON.stringify(res.data.data.token));
+        const userDetails = {};
+        userDetails.id = res.data.data.id;
+        userDetails.username = res.data.data.username;
+        userDetails.email = res.data.data.email;
+        localStorage.setItem("userDetails", JSON.stringify(userDetails));
+        AuthHeader();
       }
+      return res;
     });
 };
 
 const AuthHeader = () => {
   const token = JSON.parse(localStorage.getItem("jwt"));
-
+  console.log("token:" + token);
   if (token) {
     const userToken = { Authorization: "Bearer " + token };
-    localStorage.setItem("userToken", userToken);
+    localStorage.setItem("userToken", JSON.stringify(userToken));
+    console.log("userToekn: " + localStorage.getItem("userToken"));
     return userToken;
   } else {
     return {};
   }
 };
 
+const SignOut = () => {
+  localStorage.removeItem("userToken");
+  localStorage.removeItem("userDetails");
+};
+
 const AuthService = {
   registerUser,
   loginUser,
   AuthHeader,
+  SignOut,
 };
 
 export default AuthService;

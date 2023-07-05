@@ -1,9 +1,26 @@
 import { useEffect, useState } from "react";
 import WORD_IMAGE from "../../img/word_image.png";
+import AuthService from "../../api/AuthService";
 
 function Navbar() {
-  const [currentUser, setCurrentUser] = useState(undefined);
-  const [user, setUser] = useState(Object);
+  const [currentUser, setCurrentUser] = useState(false);
+  const [user, setUser] = useState({});
+
+  useEffect(() => {
+    const userDetails = JSON.parse(localStorage.getItem("userDetails"));
+    console.log(userDetails);
+    if (userDetails) {
+      setCurrentUser(true);
+      setUser(userDetails);
+    } else {
+      setCurrentUser(false);
+      setUser({});
+    }
+  }, []);
+
+  const signout = () => {
+    AuthService.SignOut();
+  };
 
   return (
     <nav className="navbar navbar-expand-lg navbar-light bg-light font-monospace p-4">
@@ -76,11 +93,23 @@ function Navbar() {
                 </ul>
               </li>
               {currentUser ? (
-                <li className="nav-item px-2">
-                  <a className="nav-link" href="#">
-                    Username
-                  </a>
-                </li>
+                <>
+                  <li className="nav-item px-2">
+                    <a className="nav-link" href="#">
+                      {user.username}
+                    </a>
+                  </li>
+                  <li className="nav-item px-2">
+                    <a
+                      className="nav-link active"
+                      aria-current="page"
+                      href="/"
+                      onClick={signout}
+                    >
+                      Log out
+                    </a>
+                  </li>
+                </>
               ) : (
                 <div></div>
               )}
