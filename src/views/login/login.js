@@ -1,6 +1,8 @@
 import React, { useEffect, useRef, useState } from "react";
 import { MDBBtn, MDBInput, MDBCheckbox } from "mdb-react-ui-kit";
 import AuthService from "../../api/AuthService";
+// import "react-toastify/dist/ReactToastify.css";
+// import { ToastContainer, toast } from "react-toastify";
 
 function Login() {
   const inputRef = useRef();
@@ -20,6 +22,7 @@ function Login() {
 
     AuthService.loginUser(user).then((res) => {
       if (res.data.code === 0) {
+        localStorage.setItem("loginAlert", true);
         window.location.reload();
       } else {
         setErrorMsg(res.data.msg);
@@ -34,6 +37,19 @@ function Login() {
       [name]: value,
     }));
   };
+
+  // const notifyLogin = () => {
+  //   toast.success("Login Successfully", {
+  //     position: "top-center",
+  //     autoClose: 5000,
+  //     hideProgressBar: false,
+  //     closeOnClick: true,
+  //     pauseOnHover: true,
+  //     draggable: true,
+  //     progress: undefined,
+  //     theme: "light",
+  //   });
+  // };
 
   return (
     <div>
@@ -73,6 +89,7 @@ function Login() {
         <MDBBtn className="mb-4 w-100">Sign in</MDBBtn>
       </form>
       <p className="text-center">Not a member?</p>
+      {/* <ToastContainer /> */}
     </div>
   );
 }

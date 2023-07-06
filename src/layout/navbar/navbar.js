@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import WORD_IMAGE from "../../img/word_image.png";
 import AuthService from "../../api/AuthService";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function Navbar() {
   const [currentUser, setCurrentUser] = useState(false);
@@ -18,8 +20,23 @@ function Navbar() {
     }
   }, []);
 
+  const notifyLogout = () => {
+    console.log("noti");
+    toast.success("Logout Successfully", {
+      position: "top-center",
+      autoClose: 2000,
+      hideProgressBar: false,
+      pauseOnHover: false,
+      closeOnClick: true,
+      draggable: true,
+      progress: undefined,
+      theme: "light",
+    });
+  };
+
   const signout = () => {
     AuthService.SignOut();
+    localStorage.setItem("logoutAlert", true);
   };
 
   return (
@@ -95,7 +112,7 @@ function Navbar() {
               {currentUser ? (
                 <>
                   <li className="nav-item px-2">
-                    <a className="nav-link" href="#">
+                    <a className="nav-link" href="/userDetails">
                       {user.username}
                     </a>
                   </li>
@@ -117,6 +134,7 @@ function Navbar() {
           </div>
         </div>
       </div>
+      <ToastContainer />
     </nav>
   );
 }

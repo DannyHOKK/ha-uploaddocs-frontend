@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   MDBCol,
   MDBContainer,
@@ -12,10 +12,16 @@ import {
 } from "mdb-react-ui-kit";
 
 function PersonalProfile() {
+  const [userDetails, setUserDetails] = useState({});
+
+  useEffect(() => {
+    setUserDetails(JSON.parse(localStorage.getItem("userDetails")));
+  }, []);
+
   return (
     <>
       <section className="vh-100" style={{ backgroundColor: "#f4f5f7" }}>
-        <MDBContainer className="py-5 h-100">
+        <MDBContainer className="py-5 h-20">
           <MDBRow className="justify-content-center align-items-center h-100">
             <MDBCol lg="6" className="mb-4 mb-lg-0">
               <MDBCard className="mb-3" style={{ borderRadius: ".5rem" }}>
@@ -45,32 +51,23 @@ function PersonalProfile() {
                       <hr className="mt-0 mb-4" />
                       <MDBRow className="pt-1">
                         <MDBCol size="6" className="mb-3">
-                          <MDBTypography tag="h6">Email</MDBTypography>
+                          <MDBTypography tag="h6">ID</MDBTypography>
                           <MDBCardText className="text-muted">
-                            info@example.com
+                            {userDetails.id}
                           </MDBCardText>
                         </MDBCol>
                         <MDBCol size="6" className="mb-3">
-                          <MDBTypography tag="h6">Phone</MDBTypography>
+                          <MDBTypography tag="h6">Username</MDBTypography>
                           <MDBCardText className="text-muted">
-                            123 456 789
+                            {userDetails.username}
                           </MDBCardText>
                         </MDBCol>
                       </MDBRow>
-
-                      <MDBTypography tag="h6">Information</MDBTypography>
-                      <hr className="mt-0 mb-4" />
                       <MDBRow className="pt-1">
-                        <MDBCol size="6" className="mb-3">
+                        <MDBCol className="mb-3">
                           <MDBTypography tag="h6">Email</MDBTypography>
                           <MDBCardText className="text-muted">
-                            info@example.com
-                          </MDBCardText>
-                        </MDBCol>
-                        <MDBCol size="6" className="mb-3">
-                          <MDBTypography tag="h6">Phone</MDBTypography>
-                          <MDBCardText className="text-muted">
-                            123 456 789
+                            {userDetails.email}
                           </MDBCardText>
                         </MDBCol>
                       </MDBRow>
