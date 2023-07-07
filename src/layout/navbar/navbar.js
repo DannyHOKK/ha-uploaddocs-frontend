@@ -3,8 +3,9 @@ import WORD_IMAGE from "../../img/word_image.png";
 import AuthService from "../../api/AuthService";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { Navbar, Nav, NavDropdown } from "react-bootstrap";
 
-function Navbar() {
+function HaNavbar() {
   const [currentUser, setCurrentUser] = useState(false);
   const [user, setUser] = useState({});
 
@@ -40,15 +41,15 @@ function Navbar() {
   };
 
   return (
-    <nav className="navbar navbar-expand-lg navbar-light bg-light font-monospace p-4">
+    <Navbar className="navbar navbar-expand-lg navbar-light bg-light font-monospace p-4">
       <div className="container-fluid justify-content-between">
         <div>
-          <a className="navbar-brand " href="#">
+          <Navbar.Brand className="navbar-brand" href="#">
             <img src={WORD_IMAGE} alt="" width="40" height="40" />
             File Upload Application
-          </a>
+          </Navbar.Brand>
         </div>
-        <div>
+        <Navbar.Collapse>
           <button
             className="navbar-toggler"
             type="button"
@@ -68,8 +69,8 @@ function Navbar() {
                 </a>
               </li>
               <li className="nav-item px-2">
-                <a className="nav-link" href="#">
-                  Features
+                <a className="nav-link" href="/uploadDocs">
+                  Upload Docs
                 </a>
               </li>
               <li className="nav-item px-2">
@@ -132,11 +133,11 @@ function Navbar() {
               )}
             </ul>
           </div>
-        </div>
+        </Navbar.Collapse>
       </div>
       <ToastContainer />
-    </nav>
+    </Navbar>
   );
 }
 
-export default Navbar;
+export default HaNavbar;

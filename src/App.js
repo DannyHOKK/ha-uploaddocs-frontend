@@ -5,11 +5,12 @@ import {
   Route,
   Navigate,
 } from "react-router-dom";
-import Navbar from "./layout/navbar/navbar";
 import LoginRegister from "./views/LoginRegister";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import PersonalProfile from "./views/PersonalProfile";
+import UploadDocs from "./views/UploadDocs";
+import HaNavbar from "./layout/navbar/navbar";
 
 function App() {
   const isLoggedIn = () => {
@@ -24,9 +25,10 @@ function App() {
       console.log("success");
       notifyLogin();
       localStorage.setItem("loginAlert", false);
-    } else if (localStorage.getItem("logoutAlert") === "true") {
+    }
+    if (localStorage.getItem("logoutAlert") === "true") {
       notifyLogout();
-      localStorage.setItem("logoutwAlert", false);
+      localStorage.setItem("logoutAlert", false);
     }
   }, []);
 
@@ -59,7 +61,7 @@ function App() {
   return (
     <div className="App">
       <Router>
-        <Navbar />
+        <HaNavbar />
         <Routes>
           <Route
             path="/login"
@@ -68,10 +70,11 @@ function App() {
           <Route
             path="/"
             element={
-              isLoggedIn() ? <Navigate to="/userDetails" /> : <LoginRegister />
+              isLoggedIn() ? <Navigate to="/uploadDocs" /> : <LoginRegister />
             }
           />
           <Route path="/userDetails" element={<PersonalProfile />} />
+          <Route path="/uploadDocs" element={<UploadDocs />} />
         </Routes>
       </Router>
       {/* <ToastContainer /> */}
