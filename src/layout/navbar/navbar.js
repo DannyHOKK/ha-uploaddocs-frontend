@@ -3,7 +3,6 @@ import WORD_IMAGE from "../../img/word_image.png";
 import AuthService from "../../api/AuthService";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { Navbar, Nav, NavDropdown } from "react-bootstrap";
 
 function HaNavbar() {
   const [currentUser, setCurrentUser] = useState(false);
@@ -41,15 +40,15 @@ function HaNavbar() {
   };
 
   return (
-    <Navbar className="navbar navbar-expand-lg navbar-light bg-light font-monospace p-4">
+    <nav className="navbar navbar-expand-lg navbar-light bg-light font-monospace p-4">
       <div className="container-fluid justify-content-between">
         <div>
-          <Navbar.Brand className="navbar-brand" href="#">
+          <a className="navbar-brand " href="#">
             <img src={WORD_IMAGE} alt="" width="40" height="40" />
             File Upload Application
-          </Navbar.Brand>
+          </a>
         </div>
-        <Navbar.Collapse>
+        <div>
           <button
             className="navbar-toggler"
             type="button"
@@ -133,10 +132,10 @@ function HaNavbar() {
               )}
             </ul>
           </div>
-        </Navbar.Collapse>
+        </div>
       </div>
       <ToastContainer />
-    </Navbar>
+    </nav>
   );
 }
 

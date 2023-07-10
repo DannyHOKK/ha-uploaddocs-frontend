@@ -11,18 +11,21 @@ import "react-toastify/dist/ReactToastify.css";
 import PersonalProfile from "./views/PersonalProfile";
 import UploadDocs from "./views/UploadDocs";
 import HaNavbar from "./layout/navbar/navbar";
+import AuthService from "./api/AuthService";
 
 function App() {
   const isLoggedIn = () => {
     const userToken = localStorage.getItem("userToken");
+    const userDetails = localStorage.getItem("userDetails");
     // Check if the user is logged in
+    if (userDetails === null) {
+      return false;
+    }
     return !!userToken; // Return true if userToken exists, false otherwise
   };
 
   useEffect(() => {
-    console.log(localStorage.getItem("loginAlert"));
     if (localStorage.getItem("loginAlert") === "true") {
-      console.log("success");
       notifyLogin();
       localStorage.setItem("loginAlert", false);
     }
@@ -65,19 +68,30 @@ function App() {
         <Routes>
           <Route
             path="/login"
-            element={isLoggedIn() ? <Navigate to="/" /> : <LoginRegister />}
+            element={
+              isLoggedIn() ? (
+                <Navigate to="/" />
+              ) : (
+                (AuthService.SignOut(), (<LoginRegister />))
+              )
+            }
           />
           <Route
             path="/"
             element={
-              isLoggedIn() ? <Navigate to="/uploadDocs" /> : <LoginRegister />
+              isLoggedIn() ? (
+                <Navigate to="/userDetails" />
+              ) : (
+                (AuthService.SignOut(), (<LoginRegister />))
+              )
             }
           />
+
           <Route path="/userDetails" element={<PersonalProfile />} />
           <Route path="/uploadDocs" element={<UploadDocs />} />
         </Routes>
       </Router>
-      {/* <ToastContainer /> */}
+      <ToastContainer />
     </div>
   );
 }

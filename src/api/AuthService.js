@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_URL = "http://localhost:8081/admin";
+const API_URL = "http://localhost:8080/admin";
 
 const registerUser = (user) => {
   return axios.post(API_URL + "/signup", {
@@ -23,10 +23,8 @@ const loginUser = (user) => {
       console.log(res.data.code);
       if (res.data.code === 0) {
         localStorage.setItem("jwt", JSON.stringify(res.data.data.token));
-        const userDetails = {};
-        userDetails.id = res.data.data.id;
-        userDetails.username = res.data.data.username;
-        userDetails.email = res.data.data.email;
+        const userDetails = res.data.data;
+        console.log(userDetails);
         localStorage.setItem("userDetails", JSON.stringify(userDetails));
         AuthHeader();
       }
@@ -38,9 +36,8 @@ const AuthHeader = () => {
   const token = JSON.parse(localStorage.getItem("jwt"));
   console.log("token:" + token);
   if (token) {
-    const userToken = { Authorization: "Bearer " + token };
-    localStorage.setItem("userToken", JSON.stringify(userToken));
-    console.log("userToekn: " + localStorage.getItem("userToken"));
+    const userToken = "Bearer " + token;
+    localStorage.setItem("userToken", userToken);
     return userToken;
   } else {
     return {};

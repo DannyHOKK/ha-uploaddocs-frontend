@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useRef, useEffect } from "react";
 import { MDBFile, MDBInput, MDBBtn } from "mdb-react-ui-kit";
-import AuthService from "../api/AuthService";
+import DocsService from "../api/DocsService";
 
 function UploadDocs() {
   const inputRef = useRef();
@@ -21,14 +21,19 @@ function UploadDocs() {
     }));
   };
 
-  const changeDocsDataHandler = (e) => {
-    setDocsData(e.target.value);
+  const docsHandler = (e) => {
+    setDocsData(e.target.files[0]);
   };
 
-  const submitHandler = () => {
+  const submitHandler = (e) => {
+    e.preventDefault();
     const formData = new FormData();
-    formData.append("docs", docsData);
-    formData.append("docsDetails", JSON.stringify(docsDetails));
+    formData.append("file", docsData);
+    formData.append("details", JSON.stringify(docsDetails));
+    console.log(formData);
+    console.log(docsData);
+    console.log(JSON.stringify(docsDetails));
+    DocsService.uploadDocs(formData);
   };
 
   useEffect(() => {
@@ -39,7 +44,12 @@ function UploadDocs() {
       <section className="vh-100">
         <div className=" m-5 container">
           <form onSubmit={submitHandler}>
-            <select class="form-select" aria-label="Select Docs Type">
+            <select
+              className="form-select"
+              aria-label="Select Docs Type"
+              name="category"
+              onChange={changeHandler}
+            >
               <option selected>Select Docs Type</option>
               <option value="pdf">PDF</option>
               <option value="excel">EXCEL</option>
@@ -52,7 +62,6 @@ function UploadDocs() {
               label="Filename"
               id="form1"
               name="filename"
-              type="filename"
               value={docsDetails.filename}
               onChange={changeHandler}
             ></MDBInput>
@@ -69,11 +78,12 @@ function UploadDocs() {
 
             <MDBFile
               label="Upload Docs"
-              id="customFile"
-              name="data"
-              value={docsData}
-              onChange={changeHandler}
+              id="file"
+              name="file"
+              type="file"
+              onChange={docsHandler}
             />
+
             <MDBInput
               className=" mt-4"
               wrapperClass="mb-4"

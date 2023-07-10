@@ -15,6 +15,7 @@ function PersonalProfile() {
   const [userDetails, setUserDetails] = useState({});
 
   useEffect(() => {
+    console.log(JSON.parse(localStorage.getItem("userDetails")));
     setUserDetails(JSON.parse(localStorage.getItem("userDetails")));
   }, []);
 
