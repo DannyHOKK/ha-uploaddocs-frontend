@@ -6,7 +6,7 @@ import DocsService from "../api/DocsService";
 function UploadDocs() {
   const inputRef = useRef();
   const [docsData, setDocsData] = useState(null);
-  const [docsDetails, setDocsDetails] = useState({
+  const [details, setDetails] = useState({
     category: "",
     filename: "",
     desc: "",
@@ -15,8 +15,8 @@ function UploadDocs() {
 
   const changeHandler = (e) => {
     const { name, value } = e.target;
-    setDocsDetails((e) => ({
-      ...docsDetails,
+    setDetails((e) => ({
+      ...details,
       [name]: value,
     }));
   };
@@ -29,10 +29,7 @@ function UploadDocs() {
     e.preventDefault();
     const formData = new FormData();
     formData.append("file", docsData);
-    formData.append("details", JSON.stringify(docsDetails));
-    console.log(formData);
-    console.log(docsData);
-    console.log(JSON.stringify(docsDetails));
+    formData.append("fileDetails", JSON.stringify(details));
     DocsService.uploadDocs(formData);
   };
 
@@ -62,7 +59,7 @@ function UploadDocs() {
               label="Filename"
               id="form1"
               name="filename"
-              value={docsDetails.filename}
+              value={details.filename}
               onChange={changeHandler}
             ></MDBInput>
             <MDBInput
@@ -72,7 +69,7 @@ function UploadDocs() {
               id="form1"
               name="desc"
               type="desc"
-              value={docsDetails.desc}
+              value={details.desc}
               onChange={changeHandler}
             ></MDBInput>
 
@@ -91,7 +88,7 @@ function UploadDocs() {
               id="form1"
               name="remark"
               type="remark"
-              value={docsDetails.remark}
+              value={details.remark}
               onChange={changeHandler}
             ></MDBInput>
             <MDBBtn className="mb-4 w-100">Submit</MDBBtn>
