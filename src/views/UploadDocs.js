@@ -56,15 +56,6 @@ function UploadDocs() {
               className=" mt-4"
               wrapperClass="mb-4"
               ref={inputRef}
-              label="Filename"
-              id="form1"
-              name="filename"
-              value={details.filename}
-              onChange={changeHandler}
-            ></MDBInput>
-            <MDBInput
-              className=" mt-4"
-              wrapperClass="mb-4"
               label="Desc"
               id="form1"
               name="desc"
