@@ -1,8 +1,9 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState, Fragment } from "react";
 import {
   BrowserRouter as Router,
-  Routes,
   Route,
+  Routes,
+  redirect,
   Navigate,
 } from "react-router-dom";
 import LoginRegister from "./views/LoginRegister";
@@ -11,7 +12,8 @@ import "react-toastify/dist/ReactToastify.css";
 import PersonalProfile from "./views/PersonalProfile";
 import UploadDocs from "./views/UploadDocs";
 import HaNavbar from "./layout/navbar/navbar";
-import AuthService from "./api/AuthService";
+import PrivateRoute from "./views/privateRoute";
+import EditProfile from "./views/EditProfile";
 
 function App() {
   const isLoggedIn = () => {
@@ -64,9 +66,33 @@ function App() {
   return (
     <div className="App">
       <Router>
-        <HaNavbar />
-        <Routes>
-          <Route
+        <Fragment>
+          <HaNavbar />
+          <Routes>
+            <Route exact path="/" element={<PrivateRoute />}>
+              <Route path="/" element={<PersonalProfile />} />
+              <Route path="/userDetails" element={<PersonalProfile />} />
+              <Route path="/uploadDocs" element={<UploadDocs />} />
+              <Route path="editProfile" element={<EditProfile />} />
+            </Route>
+            <Route
+              path="/login"
+              element={isLoggedIn() ? <Navigate to="/" /> : <LoginRegister />}
+            />
+
+            {/* <Route
+            exact
+            path="/"
+            element={
+              localStorage.getItem("userDetails") ? (
+                <Navigate to="/userDetails" />
+              ) : (
+                <Navigate to="/login" element={<LoginRegister />} />
+              )
+            }
+          /> */}
+
+            {/* <Route
             path="/login"
             element={
               isLoggedIn() ? (
@@ -76,6 +102,7 @@ function App() {
               )
             }
           />
+
           <Route
             path="/"
             element={
@@ -85,11 +112,15 @@ function App() {
                 (AuthService.SignOut(), (<LoginRegister />))
               )
             }
-          />
+          /> */}
 
-          <Route path="/userDetails" element={<PersonalProfile />} />
-          <Route path="/uploadDocs" element={<UploadDocs />} />
-        </Routes>
+            {/* Handle other routes or redirections here */}
+            <Route
+              path="/*"
+              element={<Navigate to="/userDetails" />} // Redirect to userDetails for unknown routes
+            />
+          </Routes>
+        </Fragment>
       </Router>
       <ToastContainer />
     </div>

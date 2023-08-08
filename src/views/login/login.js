@@ -19,7 +19,6 @@ function Login() {
 
   const submitHandler = (e) => {
     e.preventDefault();
-
     AuthService.loginUser(user).then((res) => {
       if (res.data.code === 0) {
         localStorage.setItem("loginAlert", true);

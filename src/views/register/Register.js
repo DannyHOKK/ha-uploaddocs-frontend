@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { MDBBtn, MDBInput, MDBCheckbox } from "mdb-react-ui-kit";
 import AuthService from "../../api/AuthService";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 function Register() {
@@ -83,15 +83,13 @@ function Register() {
     }
     if (!user.password) {
       msg.pwd = "Password is required";
-    }
-    if (user.password !== validPwd) {
+    } else if (user.password !== validPwd) {
       msg.pwd = "Password not same ";
-    }
-    if (!PWD_REGEX.test(user.password)) {
-      msg.validPwd =
+    } else if (!PWD_REGEX.test(user.password)) {
+      msg.pwd =
         "Password must contain a special character and greater than 8 characters";
     }
-
+    console.log(msg);
     setErrorMsg(msg);
     return msg;
   };
@@ -186,9 +184,13 @@ function Register() {
               changeHandler(e);
             }}
           />
+          <div className="">
+            <p className=""> - password must contain 8 character</p>
+            <p className=""> - password must contain 1 special character</p>
+            <p className=""> - password must contain uppercase/lowercase</p>
+          </div>
 
           <p className=" alert-danger">{errorMsg.pwd}</p>
-
           <p className=" alert-danger">{status}</p>
 
           <div className="d-flex justify-content-center mb-4">
@@ -203,7 +205,6 @@ function Register() {
           <MDBBtn className="mb-4 w-100" disabled={!submitButton}>
             Sign up
           </MDBBtn>
-          <ToastContainer />
         </form>
       )}
     </>

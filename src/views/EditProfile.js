@@ -15,10 +15,11 @@ import {
   MDBIcon,
   MDBListGroup,
   MDBListGroupItem,
+  MDBInput,
 } from "mdb-react-ui-kit";
 import { useState, useEffect } from "react";
 
-function PersonalProfile() {
+function EditProfile() {
   const [userDetails, setUserDetails] = useState({});
   const [edit, setEdit] = useState(false);
 
@@ -56,14 +57,12 @@ function PersonalProfile() {
                   style={{ width: "150px" }}
                   fluid
                 />
-                <p className="text-muted mb-1">Full Stack Developer</p>
-                <p className="text-muted mb-4">Bay Area, San Francisco, CA</p>
-                <div className="d-flex justify-content-center mb-2">
-                  <MDBBtn>Edit</MDBBtn>
-                  <MDBBtn outline className="ms-1">
-                    Delete Account
-                  </MDBBtn>
-                </div>
+                <MDBInput
+                  className="text-muted mb-1"
+                  value={userDetails.username}
+                />
+                <MDBBtn>Save & Exit</MDBBtn>
+                <div className="d-flex justify-content-center mb-2"></div>
               </MDBCardBody>
             </MDBCard>
 
@@ -129,9 +128,10 @@ function PersonalProfile() {
                     <MDBCardText>Full Name</MDBCardText>
                   </MDBCol>
                   <MDBCol sm="9">
-                    <MDBCardText className="text-muted">
-                      {userDetails.username}
-                    </MDBCardText>
+                    <MDBInput
+                      className="text-muted mb-1"
+                      value={userDetails.username}
+                    />
                   </MDBCol>
                 </MDBRow>
                 <hr />
@@ -140,9 +140,10 @@ function PersonalProfile() {
                     <MDBCardText>Email</MDBCardText>
                   </MDBCol>
                   <MDBCol sm="9">
-                    <MDBCardText className="text-muted">
-                      {userDetails.email}
-                    </MDBCardText>
+                    <MDBInput
+                      className="text-muted mb-1"
+                      value={userDetails.email}
+                    />
                   </MDBCol>
                 </MDBRow>
                 <hr />
@@ -151,9 +152,7 @@ function PersonalProfile() {
                     <MDBCardText>Mobile</MDBCardText>
                   </MDBCol>
                   <MDBCol sm="9">
-                    <MDBCardText className="text-muted">
-                      (098) 765-4321
-                    </MDBCardText>
+                    <MDBInput className="text-muted mb-1" />
                   </MDBCol>
                 </MDBRow>
                 <hr />
@@ -162,9 +161,7 @@ function PersonalProfile() {
                     <MDBCardText>Address</MDBCardText>
                   </MDBCol>
                   <MDBCol sm="9">
-                    <MDBCardText className="text-muted">
-                      Bay Area, San Francisco, CA
-                    </MDBCardText>
+                    <MDBInput className="text-muted mb-1" />
                   </MDBCol>
                 </MDBRow>
               </MDBCardBody>
@@ -176,4 +173,4 @@ function PersonalProfile() {
   );
 }
 
-export default PersonalProfile;
+export default EditProfile;
