@@ -17,16 +17,53 @@ import {
   MDBListGroupItem,
 } from "mdb-react-ui-kit";
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { confirmAlert } from "react-confirm-alert"; // Import
+import "react-confirm-alert/src/react-confirm-alert.css"; // Import css
+import AuthService from "../api/AuthService";
+import UserService from "../api/UserService";
 
 function PersonalProfile() {
   const [userDetails, setUserDetails] = useState({});
   const [edit, setEdit] = useState(false);
+  const naviagte = useNavigate();
+  const userId = JSON.parse(localStorage.getItem("userDetails"));
 
   useEffect(() => {
-    setUserDetails(JSON.parse(localStorage.getItem("userDetails")));
+    UserService.getUser(userId.id)
+      .then((res) => {
+        setUserDetails(res.data.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   }, []);
 
-  const handleEditClick = () => {};
+  const handleEditClick = () => {
+    naviagte("/editProfile");
+  };
+
+  const confirmSubmit = () => {
+    confirmAlert({
+      title: "Confirm to delelte account",
+      message: "Are you sure to do this.",
+      buttons: [
+        {
+          label: "Yes",
+          onClick: () => Delete(),
+        },
+        {
+          label: "No",
+          //onClick: () => alert('Click No')
+        },
+      ],
+    });
+  };
+
+  const Delete = () => {
+    UserService.DeleteAccount(userId.id);
+    AuthService.SignOut();
+  };
 
   return (
     <section style={{ backgroundColor: "#eee" }}>
@@ -56,11 +93,11 @@ function PersonalProfile() {
                   style={{ width: "150px" }}
                   fluid
                 />
-                <p className="text-muted mb-1">Full Stack Developer</p>
-                <p className="text-muted mb-4">Bay Area, San Francisco, CA</p>
+                <p className="text-muted mb-1">{userDetails.position}</p>
+                <p className="text-muted mb-4">{userDetails.address}</p>
                 <div className="d-flex justify-content-center mb-2">
-                  <MDBBtn>Edit</MDBBtn>
-                  <MDBBtn outline className="ms-1">
+                  <MDBBtn onClick={handleEditClick}>Edit</MDBBtn>
+                  <MDBBtn outline className="ms-1" onClick={confirmSubmit}>
                     Delete Account
                   </MDBBtn>
                 </div>
@@ -152,7 +189,7 @@ function PersonalProfile() {
                   </MDBCol>
                   <MDBCol sm="9">
                     <MDBCardText className="text-muted">
-                      (098) 765-4321
+                      {userDetails.mobile}
                     </MDBCardText>
                   </MDBCol>
                 </MDBRow>
@@ -163,7 +200,7 @@ function PersonalProfile() {
                   </MDBCol>
                   <MDBCol sm="9">
                     <MDBCardText className="text-muted">
-                      Bay Area, San Francisco, CA
+                      {userDetails.address}
                     </MDBCardText>
                   </MDBCol>
                 </MDBRow>

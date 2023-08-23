@@ -73,7 +73,7 @@ function App() {
               <Route path="/" element={<PersonalProfile />} />
               <Route path="/userDetails" element={<PersonalProfile />} />
               <Route path="/uploadDocs" element={<UploadDocs />} />
-              <Route path="editProfile" element={<EditProfile />} />
+              <Route path="/editProfile" element={<EditProfile />} />
             </Route>
             <Route
               path="/login"

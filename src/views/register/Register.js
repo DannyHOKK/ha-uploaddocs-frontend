@@ -13,7 +13,6 @@ function Register() {
   const [success, setSuccess] = useState(false);
 
   const [user, setUser] = useState({
-    name: "",
     username: "",
     email: "",
     password: "",
@@ -72,9 +71,6 @@ function Register() {
 
   const userValidator = (data) => {
     const msg = {};
-    if (!data.name) {
-      msg.name = "Name is required";
-    }
     if (!data.username) {
       msg.username = "Username is required";
     }
@@ -122,22 +118,9 @@ function Register() {
           }}
         >
           <div className="text-center mb-3"></div>
-          <p className=" alert-danger">{errorMsg.name}</p>
-          <MDBInput
-            wrapperClass="mb-4"
-            ref={inputRef}
-            label="Name"
-            name="name"
-            id="form1"
-            type="text"
-            autoComplete="on"
-            value={user.name}
-            onChange={(e) => {
-              changeHandler(e);
-            }}
-          />
           <p className=" alert-danger">{errorMsg.username}</p>
           <MDBInput
+            ref={inputRef}
             wrapperClass="mb-4"
             label="Username"
             name="username"

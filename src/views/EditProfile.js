@@ -10,24 +10,55 @@ import {
   MDBBtn,
   MDBBreadcrumb,
   MDBBreadcrumbItem,
-  MDBProgress,
-  MDBProgressBar,
+  MDBFile,
   MDBIcon,
   MDBListGroup,
   MDBListGroupItem,
   MDBInput,
 } from "mdb-react-ui-kit";
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import UserService from "../api/UserService";
 
 function EditProfile() {
   const [userDetails, setUserDetails] = useState({});
+  const [icon, setIcon] = useState(null);
   const [edit, setEdit] = useState(false);
+  const naviagte = useNavigate();
 
   useEffect(() => {
-    setUserDetails(JSON.parse(localStorage.getItem("userDetails")));
+    const userId = JSON.parse(localStorage.getItem("userDetails"));
+    console.log(userId);
+    UserService.getUser(userId.id)
+      .then((res) => {
+        setUserDetails(res.data.data);
+      })
+      .catch((error) => {
+        console.log("error" + error);
+      });
   }, []);
 
-  const handleEditClick = () => {};
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setUserDetails((e) => ({
+      ...userDetails,
+      [name]: value,
+    }));
+  };
+
+  const clickHandler = (e) => {
+    e.preventDefault();
+    const formData = new FormData();
+    formData.append("image", icon);
+    formData.append("userinfo", JSON.stringify(userDetails.userDetailsInfo));
+    UserService.updateUser(formData).then((res) => {
+      naviagte("/userDetails");
+    });
+  };
+
+  const iconHandler = (e) => {
+    setIcon(e.target.files[0]);
+  };
 
   return (
     <section style={{ backgroundColor: "#eee" }}>
@@ -57,11 +88,10 @@ function EditProfile() {
                   style={{ width: "150px" }}
                   fluid
                 />
-                <MDBInput
-                  className="text-muted mb-1"
-                  value={userDetails.username}
-                />
-                <MDBBtn>Save & Exit</MDBBtn>
+
+                <p className="text-muted m-2">{userDetails.username} </p>
+                <p className="text-muted m-2">{userDetails.address} </p>
+                <MDBBtn onClick={clickHandler}>Save & Exit</MDBBtn>
                 <div className="d-flex justify-content-center mb-2"></div>
               </MDBCardBody>
             </MDBCard>
@@ -130,7 +160,9 @@ function EditProfile() {
                   <MDBCol sm="9">
                     <MDBInput
                       className="text-muted mb-1"
+                      name="username"
                       value={userDetails.username}
+                      onChange={handleChange}
                     />
                   </MDBCol>
                 </MDBRow>
@@ -142,7 +174,9 @@ function EditProfile() {
                   <MDBCol sm="9">
                     <MDBInput
                       className="text-muted mb-1"
+                      name="email"
                       value={userDetails.email}
+                      onChange={handleChange}
                     />
                   </MDBCol>
                 </MDBRow>
@@ -152,7 +186,12 @@ function EditProfile() {
                     <MDBCardText>Mobile</MDBCardText>
                   </MDBCol>
                   <MDBCol sm="9">
-                    <MDBInput className="text-muted mb-1" />
+                    <MDBInput
+                      className="text-muted mb-1"
+                      name="mobile"
+                      value={userDetails.mobile}
+                      onChange={handleChange}
+                    />
                   </MDBCol>
                 </MDBRow>
                 <hr />
@@ -161,7 +200,26 @@ function EditProfile() {
                     <MDBCardText>Address</MDBCardText>
                   </MDBCol>
                   <MDBCol sm="9">
-                    <MDBInput className="text-muted mb-1" />
+                    <MDBInput
+                      className="text-muted mb-1"
+                      name="address"
+                      value={userDetails.address}
+                      onChange={handleChange}
+                    />
+                  </MDBCol>
+                </MDBRow>
+                <hr />
+                <MDBRow>
+                  <MDBCol sm="3">
+                    <MDBCardText>Position</MDBCardText>
+                  </MDBCol>
+                  <MDBCol sm="9">
+                    <MDBInput
+                      className="text-muted mb-1"
+                      name="position"
+                      value={userDetails.position}
+                      onChange={handleChange}
+                    />
                   </MDBCol>
                 </MDBRow>
               </MDBCardBody>
@@ -169,6 +227,14 @@ function EditProfile() {
           </MDBCol>
         </MDBRow>
       </MDBContainer>
+
+      <MDBFile
+        label="Upload Docs"
+        id="file"
+        name="file"
+        type="file"
+        onChange={iconHandler}
+      />
     </section>
   );
 }
