@@ -18,13 +18,9 @@ const loginUser = (user) => {
       password: user.password,
     })
     .then((res) => {
-      console.log(user.username);
-      console.log(user.password);
-      console.log(res.data.code);
       if (res.data.code === 0) {
         localStorage.setItem("jwt", JSON.stringify(res.data.data.token));
         const userDetails = res.data.data;
-        console.log(userDetails);
         localStorage.setItem("userDetails", JSON.stringify(userDetails));
         AuthHeader();
       }
@@ -34,7 +30,7 @@ const loginUser = (user) => {
 
 const AuthHeader = () => {
   const token = JSON.parse(localStorage.getItem("jwt"));
-  console.log("token:" + token);
+
   if (token) {
     const userToken = "Bearer " + token;
     localStorage.setItem("userToken", userToken);
@@ -47,6 +43,7 @@ const AuthHeader = () => {
 const SignOut = () => {
   localStorage.removeItem("userToken");
   localStorage.removeItem("userDetails");
+  console.log("already sign out");
 };
 
 const AuthService = {

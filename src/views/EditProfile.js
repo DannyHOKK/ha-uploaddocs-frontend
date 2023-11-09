@@ -16,19 +16,30 @@ import {
   MDBListGroupItem,
   MDBInput,
 } from "mdb-react-ui-kit";
-import { useState, useEffect } from "react";
+import { useRef, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import UserService from "../api/UserService";
+import "../css/EditProfile.css";
+import ADD_BTN from "../img/add_btn.png";
+import { Modal, Button } from "react-bootstrap";
+import Avatar from "react-avatar-edit";
+import blobToUrl from "../utils/blobToUrl";
+import Cropper from "react-easy-crop";
 
 function EditProfile() {
   const [userDetails, setUserDetails] = useState({});
   const [icon, setIcon] = useState(null);
-  const [edit, setEdit] = useState(false);
+  const [show, setShow] = useState(false);
+  const [preview, setPreview] = useState(null);
+  const [iconShow, setIconShow] = useState(false);
+  const [crop, setCrop] = React.useState({ x: 0, y: 0 });
+  const [croppedArea, setCroppedArea] = useState(null);
   const naviagte = useNavigate();
+  const inputRef = useRef(null);
 
   useEffect(() => {
     const userId = JSON.parse(localStorage.getItem("userDetails"));
-    console.log(userId);
+
     UserService.getUser(userId.id)
       .then((res) => {
         setUserDetails(res.data.data);
@@ -46,11 +57,16 @@ function EditProfile() {
     }));
   };
 
+  const handleClose = (e) => {
+    setShow(false);
+    clickHandler(e);
+  };
+
   const clickHandler = (e) => {
     e.preventDefault();
     const formData = new FormData();
     formData.append("image", icon);
-    formData.append("userinfo", JSON.stringify(userDetails.userDetailsInfo));
+    formData.append("userinfo", JSON.stringify(userDetails));
     UserService.updateUser(formData).then((res) => {
       naviagte("/userDetails");
     });
@@ -58,6 +74,27 @@ function EditProfile() {
 
   const iconHandler = (e) => {
     setIcon(e.target.files[0]);
+
+    const url = URL.createObjectURL(blobToUrl(icon));
+    const reader = new FileReader();
+    reader.readAsDataURL(icon);
+    reader.addEventListener("load", () => {
+      setPreview(reader.result);
+    });
+    setPreview(url);
+    setIconShow(true);
+  };
+
+  const iconClickHandler = () => {
+    inputRef.current.click();
+  };
+
+  const homeHandler = () => {
+    naviagte("/userDetails");
+  };
+
+  const onCropComplete = (croppedAreaPercentage, croppedAreaPixels) => {
+    setCroppedArea(croppedAreaPixels);
   };
 
   return (
@@ -70,9 +107,9 @@ function EditProfile() {
                 <a href="#">Home</a>
               </MDBBreadcrumbItem>
               <MDBBreadcrumbItem>
-                <a href="#">User</a>
+                <a onClick={homeHandler}>User</a>
               </MDBBreadcrumbItem>
-              <MDBBreadcrumbItem active>User Profile</MDBBreadcrumbItem>
+              <MDBBreadcrumbItem active>Edit</MDBBreadcrumbItem>
             </MDBBreadcrumb>
           </MDBCol>
         </MDBRow>
@@ -81,17 +118,114 @@ function EditProfile() {
           <MDBCol lg="4">
             <MDBCard className="mb-4">
               <MDBCardBody className="text-center">
-                <MDBCardImage
-                  src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava3.webp"
-                  alt="avatar"
-                  className="rounded-circle"
-                  style={{ width: "150px" }}
-                  fluid
-                />
+                <div>
+                  <MDBCardImage
+                    src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava3.webp"
+                    alt="icon"
+                    className="rounded-circle"
+                    style={{ width: "150px", backgroundImage: { ADD_BTN } }}
+                    fluid
+                  />
+                </div>
 
                 <p className="text-muted m-2">{userDetails.username} </p>
                 <p className="text-muted m-2">{userDetails.address} </p>
-                <MDBBtn onClick={clickHandler}>Save & Exit</MDBBtn>
+                <MDBBtn
+                  onClick={() => {
+                    setShow(true);
+                  }}
+                >
+                  Save & Exit
+                </MDBBtn>
+                <Modal
+                  show={show}
+                  onHide={() => {
+                    setShow(false);
+                  }}
+                >
+                  <Modal.Header closeButton>
+                    <Modal.Title>Save Confirmation</Modal.Title>
+                  </Modal.Header>
+                  <Modal.Body>
+                    Woohoo, Are you sure to save the change?
+                  </Modal.Body>
+                  <Modal.Footer>
+                    <Button
+                      variant="secondary"
+                      onClick={() => {
+                        setShow(false);
+                      }}
+                    >
+                      Close
+                    </Button>
+                    <Button
+                      variant="primary"
+                      className="btn btn-danger"
+                      onClick={handleClose}
+                    >
+                      Save & Exit
+                    </Button>
+                  </Modal.Footer>
+                </Modal>
+
+                <MDBBtn
+                  onClick={() => {
+                    setIconShow(true);
+                  }}
+                >
+                  Upload Image
+                </MDBBtn>
+
+                <Modal
+                  show={iconShow}
+                  onHide={() => {
+                    setIconShow(false);
+                  }}
+                >
+                  <Modal.Header closeButton>
+                    <Modal.Title>Crop your profile picture</Modal.Title>
+                  </Modal.Header>
+                  <Modal.Body>
+                    <>
+                      {preview ? (
+                        <>
+                          <div>
+                            <Cropper
+                              image={preview}
+                              crop={crop}
+                              aspect={1}
+                              onCropChange={setCrop}
+                              onCropComplete={onCropComplete}
+                            />
+                          </div>
+                        </>
+                      ) : null}
+                    </>
+                  </Modal.Body>
+                  <Modal.Footer>
+                    <Button variant="secondary" onClick={iconClickHandler}>
+                      Choose
+                    </Button>
+
+                    <input
+                      type="file"
+                      ref={inputRef}
+                      onChange={iconHandler}
+                      style={{ display: "none" }}
+                    ></input>
+
+                    <Button
+                      variant="primary"
+                      className="btn"
+                      onClick={() => {
+                        setIconShow(false);
+                      }}
+                    >
+                      Finish
+                    </Button>
+                  </Modal.Footer>
+                </Modal>
+
                 <div className="d-flex justify-content-center mb-2"></div>
               </MDBCardBody>
             </MDBCard>
@@ -227,14 +361,6 @@ function EditProfile() {
           </MDBCol>
         </MDBRow>
       </MDBContainer>
-
-      <MDBFile
-        label="Upload Docs"
-        id="file"
-        name="file"
-        type="file"
-        onChange={iconHandler}
-      />
     </section>
   );
 }

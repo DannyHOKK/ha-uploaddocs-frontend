@@ -70,54 +70,19 @@ function App() {
           <HaNavbar />
           <Routes>
             <Route exact path="/" element={<PrivateRoute />}>
-              <Route path="/" element={<PersonalProfile />} />
-              <Route path="/userDetails" element={<PersonalProfile />} />
-              <Route path="/uploadDocs" element={<UploadDocs />} />
-              <Route path="/editProfile" element={<EditProfile />} />
+              <Route path="" element={<PersonalProfile />} />
+              <Route path="uploadDocs" element={<UploadDocs />} />
+              <Route path="userDetails" element={<PersonalProfile />} />
+              <Route path="userDetails/editProfile" element={<EditProfile />} />
             </Route>
             <Route
-              path="/login"
+              path="login"
               element={isLoggedIn() ? <Navigate to="/" /> : <LoginRegister />}
             />
 
-            {/* <Route
-            exact
-            path="/"
-            element={
-              localStorage.getItem("userDetails") ? (
-                <Navigate to="/userDetails" />
-              ) : (
-                <Navigate to="/login" element={<LoginRegister />} />
-              )
-            }
-          /> */}
-
-            {/* <Route
-            path="/login"
-            element={
-              isLoggedIn() ? (
-                <Navigate to="/" />
-              ) : (
-                (AuthService.SignOut(), (<LoginRegister />))
-              )
-            }
-          />
-
-          <Route
-            path="/"
-            element={
-              isLoggedIn() ? (
-                <Navigate to="/userDetails" />
-              ) : (
-                (AuthService.SignOut(), (<LoginRegister />))
-              )
-            }
-          /> */}
-
-            {/* Handle other routes or redirections here */}
             <Route
               path="/*"
-              element={<Navigate to="/userDetails" />} // Redirect to userDetails for unknown routes
+              element={<Navigate to="userDetails" />} // Redirect to userDetails for unknown routes
             />
           </Routes>
         </Fragment>

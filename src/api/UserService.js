@@ -10,12 +10,14 @@ const getUser = (userid) => {
       headers: {
         Authorization: tokenHeader,
       },
+      responseType: "json",
     })
     .then((res) => {
       return res;
     })
     .catch((error) => {
-      return error;
+      console.error("Error fetching user data:", error);
+      throw error;
     });
 };
 
@@ -35,22 +37,34 @@ const updateUser = (formData) => {
     });
 };
 
-const DeleteAccount = () => {
+const DeleteAccount = (userid) => {
   return axios
-    .post(
-      API_URL + "/deleteUser",
-      {},
-      {
-        headers: {
-          Authorization: tokenHeader,
-        },
-      }
-    )
+    .post(API_URL + "/deleteUser?id=" + userid, "", {
+      headers: {
+        Authorization: tokenHeader,
+      },
+    })
     .then((res) => {
       return res;
     })
-    .error((error) => {
-      return error;
+    .catch((error) => {
+      console.error("Error fetching user data:", error);
+      throw error;
+    });
+};
+
+const GetIcon = (userid) => {
+  return axios
+    .post(API_URL + "/getIcon?id=" + userid, "", {
+      headers: {
+        Authorization: tokenHeader,
+      },
+    })
+    .then((res) => {
+      return res;
+    })
+    .catch((error) => {
+      throw error;
     });
 };
 
@@ -58,6 +72,7 @@ const UserService = {
   getUser,
   updateUser,
   DeleteAccount,
+  GetIcon,
 };
 
 export default UserService;

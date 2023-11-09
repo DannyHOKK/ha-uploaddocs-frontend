@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useId } from "react";
 import {
   MDBCol,
   MDBContainer,
@@ -22,10 +22,13 @@ import { confirmAlert } from "react-confirm-alert"; // Import
 import "react-confirm-alert/src/react-confirm-alert.css"; // Import css
 import AuthService from "../api/AuthService";
 import UserService from "../api/UserService";
+import { Modal, Button } from "react-bootstrap";
+import blobToUrl from "../utils/blobToUrl";
 
 function PersonalProfile() {
   const [userDetails, setUserDetails] = useState({});
-  const [edit, setEdit] = useState(false);
+  const [show, setShow] = useState(false);
+  const [icon, setIcon] = useState(null);
   const naviagte = useNavigate();
   const userId = JSON.parse(localStorage.getItem("userDetails"));
 
@@ -35,34 +38,39 @@ function PersonalProfile() {
         setUserDetails(res.data.data);
       })
       .catch((error) => {
+        console.log("error" + error);
+      });
+
+    UserService.GetIcon(userId.id)
+      .then((res) => {
+        const url = URL.createObjectURL(blobToUrl(res.data.data));
+        setIcon(url);
+      })
+      .catch((error) => {
         console.log(error);
       });
   }, []);
 
-  const handleEditClick = () => {
-    naviagte("/editProfile");
+  const handleClose = () => {
+    setShow(false);
+    Delete();
   };
+  const handleShow = () => setShow(true);
 
-  const confirmSubmit = () => {
-    confirmAlert({
-      title: "Confirm to delelte account",
-      message: "Are you sure to do this.",
-      buttons: [
-        {
-          label: "Yes",
-          onClick: () => Delete(),
-        },
-        {
-          label: "No",
-          //onClick: () => alert('Click No')
-        },
-      ],
-    });
+  const handleEditClick = () => {
+    naviagte("/userDetails/editProfile");
   };
 
   const Delete = () => {
-    UserService.DeleteAccount(userId.id);
-    AuthService.SignOut();
+    UserService.DeleteAccount(userId.id)
+      .then((res) => {
+        AuthService.SignOut();
+        localStorage.setItem("logoutAlert", true);
+        naviagte("login");
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   };
 
   return (
@@ -87,19 +95,55 @@ function PersonalProfile() {
             <MDBCard className="mb-4">
               <MDBCardBody className="text-center">
                 <MDBCardImage
-                  src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava3.webp"
+                  src={icon}
                   alt="avatar"
                   className="rounded-circle"
-                  style={{ width: "150px" }}
                   fluid
                 />
                 <p className="text-muted mb-1">{userDetails.position}</p>
                 <p className="text-muted mb-4">{userDetails.address}</p>
                 <div className="d-flex justify-content-center mb-2">
                   <MDBBtn onClick={handleEditClick}>Edit</MDBBtn>
-                  <MDBBtn outline className="ms-1" onClick={confirmSubmit}>
+
+                  <Button
+                    outline
+                    className="ms-1 btn btn-danger"
+                    variant="primary"
+                    onClick={handleShow}
+                  >
                     Delete Account
-                  </MDBBtn>
+                  </Button>
+
+                  <Modal
+                    show={show}
+                    onHide={() => {
+                      setShow(false);
+                    }}
+                  >
+                    <Modal.Header closeButton>
+                      <Modal.Title>Delete Confirmation</Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body>
+                      Woohoo, Are you sure to delete this account ?
+                    </Modal.Body>
+                    <Modal.Footer>
+                      <Button
+                        variant="secondary"
+                        onClick={() => {
+                          setShow(false);
+                        }}
+                      >
+                        Close
+                      </Button>
+                      <Button
+                        variant="primary"
+                        className="btn btn-danger"
+                        onClick={handleClose}
+                      >
+                        Delete
+                      </Button>
+                    </Modal.Footer>
+                  </Modal>
                 </div>
               </MDBCardBody>
             </MDBCard>
