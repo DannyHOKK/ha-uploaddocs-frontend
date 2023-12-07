@@ -22,6 +22,10 @@ const getUser = (userid) => {
 };
 
 const updateUser = (formData) => {
+  for (const pair of formData.entries()) {
+    console.log(pair[0], pair[1]);
+  }
+
   return axios
     .post(API_URL + "/update", formData, {
       headers: {
@@ -68,11 +72,27 @@ const GetIcon = (userid) => {
     });
 };
 
+const getUserList = () => {
+  return axios
+    .get(API_URL + "/getUserList", {
+      headers: {
+        Authorization: tokenHeader,
+      },
+    })
+    .then((res) => {
+      return res;
+    })
+    .catch((error) => {
+      throw error;
+    });
+};
+
 const UserService = {
   getUser,
   updateUser,
   DeleteAccount,
   GetIcon,
+  getUserList,
 };
 
 export default UserService;

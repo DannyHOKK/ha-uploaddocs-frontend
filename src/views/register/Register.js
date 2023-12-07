@@ -46,16 +46,12 @@ function Register() {
     e.preventDefault();
     setStatus("");
     const msg = userValidator(user);
-    console.log(Object.keys(msg).length);
     if (Object.keys(msg).length === 0) {
       AuthService.registerUser(user)
         .then((res) => {
-          console.log("then");
-          console.log(res.data.code);
           if (res && res.data) {
             if (res.data.code === -1) {
               setStatus(res.data.msg);
-              console.log(res.data.msg);
             } else if (res.data.code === 0) {
               notify();
               setSuccess(true);
@@ -124,7 +120,7 @@ function Register() {
             wrapperClass="mb-4"
             label="Username"
             name="username"
-            id="form1"
+            id="form2"
             type="text"
             autoComplete="on"
             value={user.username}
@@ -137,7 +133,7 @@ function Register() {
             wrapperClass="mb-4"
             label="Email"
             name="email"
-            id="form1"
+            id="form3"
             type="email"
             autoComplete="on"
             value={user.email}
@@ -149,7 +145,7 @@ function Register() {
             wrapperClass="mb-4"
             label="Password"
             name="password"
-            id="form1"
+            id="form4"
             type="password"
             value={user.password}
             onChange={(e) => {
@@ -160,7 +156,7 @@ function Register() {
             wrapperClass="mb-4"
             label="Repeat Your Password"
             name="validPwd"
-            id="form1"
+            id="form5"
             type="password"
             value={validPwd}
             onChange={(e) => {
@@ -179,7 +175,7 @@ function Register() {
           <div className="d-flex justify-content-center mb-4">
             <MDBCheckbox
               name="flexCheck"
-              id="flexCheckDefault"
+              id="flexCheckDefault2"
               label="I have read and agree to the terms"
               onChange={handleCheckboxChange}
             />

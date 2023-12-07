@@ -1,17 +1,18 @@
 import React, { useEffect, useRef, useState } from "react";
 import { MDBBtn, MDBInput, MDBCheckbox } from "mdb-react-ui-kit";
-import AuthService from "../../api/AuthService";
+
+import { useAuth } from "../../api/AuthContext";
 // import "react-toastify/dist/ReactToastify.css";
 // import { ToastContainer, toast } from "react-toastify";
 
 function Login() {
   const inputRef = useRef();
-
   const [errorMsg, setErrorMsg] = useState("");
   const [user, setUser] = useState({
     username: "",
     password: "",
   });
+  const { login } = useAuth();
 
   useEffect(() => {
     inputRef.current.focus();
@@ -19,13 +20,8 @@ function Login() {
 
   const submitHandler = (e) => {
     e.preventDefault();
-    AuthService.loginUser(user).then((res) => {
-      if (res.data.code === 0) {
-        localStorage.setItem("loginAlert", true);
-        window.location.reload();
-      } else {
-        setErrorMsg(res.data.msg);
-      }
+    login(user).then((res) => {
+      setErrorMsg(res);
     });
   };
 
@@ -35,20 +31,8 @@ function Login() {
       ...user,
       [name]: value,
     }));
+    setErrorMsg(null);
   };
-
-  // const notifyLogin = () => {
-  //   toast.success("Login Successfully", {
-  //     position: "top-center",
-  //     autoClose: 5000,
-  //     hideProgressBar: false,
-  //     closeOnClick: true,
-  //     pauseOnHover: true,
-  //     draggable: true,
-  //     progress: undefined,
-  //     theme: "light",
-  //   });
-  // };
 
   return (
     <div>
@@ -68,7 +52,7 @@ function Login() {
           wrapperClass="mb-4"
           label="Password"
           name="password"
-          id="form2"
+          id="form6"
           type="password"
           value={user.password}
           onChange={changeHandler}

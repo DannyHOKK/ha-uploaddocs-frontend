@@ -18,14 +18,17 @@ import {
 } from "mdb-react-ui-kit";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { confirmAlert } from "react-confirm-alert"; // Import
 import "react-confirm-alert/src/react-confirm-alert.css"; // Import css
+import "../css/PersonalProfile.css";
 import AuthService from "../api/AuthService";
 import UserService from "../api/UserService";
 import { Modal, Button } from "react-bootstrap";
 import blobToUrl from "../utils/blobToUrl";
+import "react-image-crop/dist/ReactCrop.css";
+import default_icon from "../img/default_icon.png";
 
 function PersonalProfile() {
+  const [crop, setCrop] = useState({ aspect: 1 / 1 });
   const [userDetails, setUserDetails] = useState({});
   const [show, setShow] = useState(false);
   const [icon, setIcon] = useState(null);
@@ -33,6 +36,11 @@ function PersonalProfile() {
   const userId = JSON.parse(localStorage.getItem("userDetails"));
 
   useEffect(() => {
+    if (userId == null) {
+      localStorage.setItem("isAuthenticated", false);
+      return;
+    }
+
     UserService.getUser(userId.id)
       .then((res) => {
         setUserDetails(res.data.data);
@@ -43,8 +51,12 @@ function PersonalProfile() {
 
     UserService.GetIcon(userId.id)
       .then((res) => {
-        const url = URL.createObjectURL(blobToUrl(res.data.data));
-        setIcon(url);
+        if (res.data.data === null) {
+          setIcon(default_icon);
+        } else {
+          const url = URL.createObjectURL(blobToUrl(res.data.data));
+          setIcon(url);
+        }
       })
       .catch((error) => {
         console.log(error);
@@ -97,7 +109,7 @@ function PersonalProfile() {
                 <MDBCardImage
                   src={icon}
                   alt="avatar"
-                  className="rounded-circle"
+                  className="rounded-circle icon-container mb-4"
                   fluid
                 />
                 <p className="text-muted mb-1">{userDetails.position}</p>
@@ -106,7 +118,6 @@ function PersonalProfile() {
                   <MDBBtn onClick={handleEditClick}>Edit</MDBBtn>
 
                   <Button
-                    outline
                     className="ms-1 btn btn-danger"
                     variant="primary"
                     onClick={handleShow}
@@ -150,7 +161,7 @@ function PersonalProfile() {
 
             <MDBCard className="mb-4 mb-lg-0">
               <MDBCardBody className="p-0">
-                <MDBListGroup flush className="rounded-3">
+                <MDBListGroup className="rounded-3">
                   <MDBListGroupItem className="d-flex justify-content-between align-items-center p-3">
                     <MDBIcon fas icon="globe fa-lg text-warning" />
                     <MDBCardText>https://mdbootstrap.com</MDBCardText>

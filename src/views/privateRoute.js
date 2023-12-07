@@ -1,20 +1,17 @@
 // PrivateRoute.js
-import React from "react";
-import { Route, Navigate, Outlet } from "react-router-dom";
+import React, { useEffect } from "react";
+import { Navigate, Outlet } from "react-router-dom";
 
 const PrivateRoute = () => {
-  const isLoggedIn = () => {
-    const userToken = localStorage.getItem("userToken");
-    const userDetails = localStorage.getItem("userDetails");
-    // Check if the user is logged in
-
-    if (userDetails === null) {
+  const checkAuthenticated = () => {
+    if (localStorage.getItem("isAuthenticated") === "true") {
+      return true;
+    } else if (localStorage.getItem("isAuthenticated") === false) {
       return false;
     }
-    return !!userToken; // Return true if userToken exists, false otherwise
   };
 
-  return isLoggedIn() ? <Outlet /> : <Navigate to="/login" />;
+  return checkAuthenticated() ? <Outlet /> : <Navigate to="/login" />;
 };
 
 export default PrivateRoute;

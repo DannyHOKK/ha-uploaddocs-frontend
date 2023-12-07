@@ -20,8 +20,57 @@ const uploadDocs = (formData) => {
     });
 };
 
+const getDocsList = () => {
+  return axios
+    .get(API_URL + "/getDocsList", {
+      headers: {
+        Authorization: tokenHeader,
+      },
+    })
+    .then((res) => {
+      return res;
+    })
+    .catch((err) => {
+      return err;
+    });
+};
+
+const searchDocsList = (query) => {
+  console.log(query);
+  return axios
+    .post(API_URL + "/searchDocsList", query, {
+      headers: {
+        Authorization: tokenHeader,
+      },
+    })
+    .then((res) => {
+      return res;
+    })
+    .catch((err) => {
+      return err;
+    });
+};
+
+const downloadDocs = (id) => {
+  return axios
+    .post(API_URL + "/docsDownload?id=" + id, "", {
+      headers: {
+        Authorization: tokenHeader,
+      },
+    })
+    .then((res) => {
+      return res;
+    })
+    .catch((err) => {
+      return err;
+    });
+};
+
 const DocsService = {
   uploadDocs,
+  getDocsList,
+  searchDocsList,
+  downloadDocs,
 };
 
 export default DocsService;

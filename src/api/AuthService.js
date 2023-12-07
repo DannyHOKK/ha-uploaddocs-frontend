@@ -18,25 +18,24 @@ const loginUser = (user) => {
       password: user.password,
     })
     .then((res) => {
+      console.log(user);
       if (res.data.code === 0) {
-        localStorage.setItem("jwt", JSON.stringify(res.data.data.token));
-        const userDetails = res.data.data;
-        localStorage.setItem("userDetails", JSON.stringify(userDetails));
-        AuthHeader();
+        localStorage.setItem("userToken", "Bearer " + res.data.data.token);
+        localStorage.setItem("userDetails", JSON.stringify(res.data.data));
       }
       return res;
+    })
+    .catch((err) => {
+      return err;
     });
 };
 
 const AuthHeader = () => {
-  const token = JSON.parse(localStorage.getItem("jwt"));
-
-  if (token) {
-    const userToken = "Bearer " + token;
-    localStorage.setItem("userToken", userToken);
+  const userToken = localStorage.getItem("userToken");
+  if (userToken) {
     return userToken;
   } else {
-    return {};
+    return;
   }
 };
 

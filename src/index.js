@@ -4,12 +4,15 @@ import "./index.css";
 import "mdb-react-ui-kit/dist/css/mdb.min.css";
 import "@fortawesome/fontawesome-free/css/all.min.css";
 import reportWebVitals from "./reportWebVitals";
-import Navbar from "./layout/navbar/navbar";
-import Login from "./views/login/login";
 import App from "./App";
+import { AuthProvider } from "./api/AuthContext";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
-root.render(<App />);
+root.render(
+  <AuthProvider>
+    <App />
+  </AuthProvider>
+);
 
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))

@@ -1,9 +1,8 @@
-import React, { useEffect, useState, Fragment } from "react";
+import React, { useEffect, Fragment } from "react";
 import {
   BrowserRouter as Router,
   Route,
   Routes,
-  redirect,
   Navigate,
 } from "react-router-dom";
 import LoginRegister from "./views/LoginRegister";
@@ -14,18 +13,10 @@ import UploadDocs from "./views/UploadDocs";
 import HaNavbar from "./layout/navbar/navbar";
 import PrivateRoute from "./views/privateRoute";
 import EditProfile from "./views/EditProfile";
+import DocsList from "./views/DocsList";
+import UserList from "./views/UserList";
 
 function App() {
-  const isLoggedIn = () => {
-    const userToken = localStorage.getItem("userToken");
-    const userDetails = localStorage.getItem("userDetails");
-    // Check if the user is logged in
-    if (userDetails === null) {
-      return false;
-    }
-    return !!userToken; // Return true if userToken exists, false otherwise
-  };
-
   useEffect(() => {
     if (localStorage.getItem("loginAlert") === "true") {
       notifyLogin();
@@ -36,6 +27,14 @@ function App() {
       localStorage.setItem("logoutAlert", false);
     }
   }, []);
+
+  const checkAuthenticated = () => {
+    if (localStorage.getItem("isAuthenticated") === "true") {
+      return true;
+    } else {
+      return false;
+    }
+  };
 
   const notifyLogin = () => {
     toast.success("Login Successfully", {
@@ -72,12 +71,16 @@ function App() {
             <Route exact path="/" element={<PrivateRoute />}>
               <Route path="" element={<PersonalProfile />} />
               <Route path="uploadDocs" element={<UploadDocs />} />
+              <Route path="docsList" element={<DocsList />} />
+              <Route path="userList" element={<UserList />} />
               <Route path="userDetails" element={<PersonalProfile />} />
               <Route path="userDetails/editProfile" element={<EditProfile />} />
             </Route>
             <Route
               path="login"
-              element={isLoggedIn() ? <Navigate to="/" /> : <LoginRegister />}
+              element={
+                checkAuthenticated() ? <Navigate to="/" /> : <LoginRegister />
+              }
             />
 
             <Route

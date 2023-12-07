@@ -1,16 +1,15 @@
 import { useEffect, useState } from "react";
 import WORD_IMAGE from "../../img/word_image.png";
-import AuthService from "../../api/AuthService";
-import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { useAuth } from "../../api/AuthContext";
 
 function HaNavbar() {
   const [currentUser, setCurrentUser] = useState(false);
   const [user, setUser] = useState({});
+  const { logout } = useAuth();
 
   useEffect(() => {
     const userDetails = JSON.parse(localStorage.getItem("userDetails"));
-    console.log(userDetails);
     if (userDetails) {
       setCurrentUser(true);
       setUser(userDetails);
@@ -20,22 +19,8 @@ function HaNavbar() {
     }
   }, []);
 
-  const notifyLogout = () => {
-    console.log("noti");
-    toast.success("Logout Successfully", {
-      position: "top-center",
-      autoClose: 2000,
-      hideProgressBar: false,
-      pauseOnHover: false,
-      closeOnClick: true,
-      draggable: true,
-      progress: undefined,
-      theme: "light",
-    });
-  };
-
   const signout = () => {
-    AuthService.SignOut();
+    logout();
     localStorage.setItem("logoutAlert", true);
   };
 
@@ -76,11 +61,11 @@ function HaNavbar() {
               </a>
             </li>
             <li className="nav-item px-2">
-              <a className="nav-link" href="#">
-                Pricing
+              <a className="nav-link" href="/docsList">
+                Docs List
               </a>
             </li>
-            <li className="nav-item px-2 dropdown">
+            {/* <li className="nav-item px-2 dropdown">
               <a
                 className="nav-link dropdown-toggle"
                 href="#"
@@ -111,6 +96,12 @@ function HaNavbar() {
                   </a>
                 </li>
               </ul>
+            </li> */}
+
+            <li className="nav-item px-2">
+              <a className="nav-link" href="/userList">
+                User List
+              </a>
             </li>
             {currentUser ? (
               <>

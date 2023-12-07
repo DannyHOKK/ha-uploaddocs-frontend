@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useRef, useEffect } from "react";
 import { MDBFile, MDBInput, MDBBtn } from "mdb-react-ui-kit";
 import DocsService from "../api/DocsService";
+import { Modal } from "react-bootstrap";
 
 function UploadDocs() {
   const inputRef = useRef();
@@ -12,7 +13,7 @@ function UploadDocs() {
     desc: "",
     remark: "",
   });
-
+  const [show, setShow] = useState(false);
   const changeHandler = (e) => {
     const { name, value } = e.target;
     setDetails((e) => ({
@@ -27,10 +28,21 @@ function UploadDocs() {
 
   const submitHandler = (e) => {
     e.preventDefault();
-    const formData = new FormData();
-    formData.append("file", docsData);
-    formData.append("fileDetails", JSON.stringify(details));
-    DocsService.uploadDocs(formData);
+    if (docsData !== null) {
+      console.log(docsData);
+      const formData = new FormData();
+      formData.append("file", docsData);
+      formData.append("fileDetails", JSON.stringify(details));
+      DocsService.uploadDocs(formData);
+      setShow(true);
+    } else {
+      alert("Please Upload Docs! ");
+    }
+  };
+
+  const clickHandler = (e) => {
+    setShow(false);
+    window.location.reload();
   };
 
   useEffect(() => {
@@ -39,15 +51,17 @@ function UploadDocs() {
   return (
     <>
       <section className="vh-100">
-        <div className=" m-5 container">
-          <form onSubmit={submitHandler}>
+        <div className=" m-5 container ">
+          <form>
             <select
               className="form-select"
               aria-label="Select Docs Type"
               name="category"
               onChange={changeHandler}
             >
-              <option selected>Select Docs Type</option>
+              <option value="" disabled selected>
+                Select Docs Type
+              </option>
               <option value="pdf">PDF</option>
               <option value="excel">EXCEL</option>
               <option value="word">WORD</option>
@@ -56,7 +70,7 @@ function UploadDocs() {
               className=" mt-4"
               wrapperClass="mb-4"
               ref={inputRef}
-              label="Desc"
+              label="Description"
               id="form1"
               name="desc"
               type="desc"
@@ -82,7 +96,23 @@ function UploadDocs() {
               value={details.remark}
               onChange={changeHandler}
             ></MDBInput>
-            <MDBBtn className="mb-4 w-100">Submit</MDBBtn>
+            <MDBBtn className="mb-4 w-100" onClick={submitHandler}>
+              Submit
+            </MDBBtn>
+            <Modal
+              show={show}
+              onHide={() => {
+                setShow(false);
+              }}
+            >
+              <Modal.Header closeButton></Modal.Header>
+              <Modal.Body>Upload Success!</Modal.Body>
+              <Modal.Footer>
+                <button className="btn btn-primary" onClick={clickHandler}>
+                  Close
+                </button>
+              </Modal.Footer>
+            </Modal>
           </form>
         </div>
       </section>
