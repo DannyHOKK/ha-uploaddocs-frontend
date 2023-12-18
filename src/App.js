@@ -15,6 +15,7 @@ import PrivateRoute from "./views/privateRoute";
 import EditProfile from "./views/EditProfile";
 import DocsList from "./views/DocsList";
 import UserList from "./views/UserList";
+import "./App.css";
 
 function App() {
   useEffect(() => {

@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import DocsService from "../api/DocsService";
 import { MDBInput } from "mdb-react-ui-kit";
 import UserService from "../api/UserService";
+import { Modal, ModalBody, ModalHeader } from "react-bootstrap";
+import { Autocomplete, TextField } from "@mui/material";
 
 function DocsList() {
   const [docsList, setDocsList] = useState([]);
@@ -12,20 +14,27 @@ function DocsList() {
     createBy: "",
     remark: "",
   });
+  const [showDelete, setShowDelete] = useState(false);
 
   useEffect(() => {
     loadDocsList();
     loadUserList();
   }, []);
 
-  const loadUserList = () => {
-    UserService.getUserList()
-      .then((res) => {
-        setUserList(res.data.data);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+  const loadUserList = async () => {
+    const res = await UserService.getUserList();
+
+    // UserService.getUserList()
+    //   .then((res) => {
+    //     setUserList(res.data.data);
+    //   })
+    //   .catch((err) => {
+    //     console.log(err);
+    //   });
+
+    if (res) setUserList(res.data.data);
+
+    console.log(res.data.data);
   };
 
   const loadDocsList = () => {
@@ -56,37 +65,52 @@ function DocsList() {
       });
   };
   const downloadDocsHandler = async (id) => {
-    const response = await DocsService.downloadDocs(id);
+    try {
+      const response = await DocsService.downloadDocs(id);
+      console.log(response);
+      if (response.status === 200) {
+        const blob = new Blob([response.data]);
 
-    console.log("response", response);
-    if (response.ok) {
-      // Create a Blob from the response
-      const blob = await response.blob();
+        const link = document.createElement("a");
 
-      // Create a link element
-      const link = document.createElement("a");
+        // Get the filename from the Content-Disposition header
+        const contentDisposition = response.headers["content-disposition"];
+        console.log("contentDisposition: " + contentDisposition);
+        const fileNameMatch =
+          contentDisposition && contentDisposition.match(/filename="(.+)"$/);
+        const fileName = fileNameMatch
+          ? decodeURIComponent(fileNameMatch[1])
+          : "error.txt";
 
-      // Create a URL for the Blob and set it as the href of the link
-      const url = window.URL.createObjectURL(blob);
-      link.href = url;
+        const url = window.URL.createObjectURL(blob);
+        link.href = url;
+        link.setAttribute("download", fileName);
 
-      // Set the filename for the download
-      link.setAttribute("download", "Docs");
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
 
-      // Append the link to the body
-      document.body.appendChild(link);
-
-      // Trigger the click event on the link
-      link.click();
-
-      // Remove the link from the body
-      document.body.removeChild(link);
-
-      // Clean up the URL created for the Blob
-      window.URL.revokeObjectURL(url);
-    } else {
-      console.error("Failed to download document");
+        window.URL.revokeObjectURL(url);
+      } else {
+        console.error("Failed to download document");
+      }
+    } catch (error) {
+      console.error("Error downloading document:", error);
+      // Handle the error as needed
     }
+  };
+
+  const deleteDocsHandler = (docsId) => {
+    const response = DocsService.deleteDocsId(docsId);
+
+    console.log(response);
+  };
+
+  const changeUsernameHandler = (event, value) => {
+    setQuery((query) => ({
+      ...query,
+      createBy: value,
+    }));
   };
 
   return (
@@ -133,23 +157,34 @@ function DocsList() {
             </label>
             <div className="col-sm-2" style={{ marginRight: "60px" }}>
               {userList.length > 0 ? (
-                <select
-                  type="text"
-                  className="form-select"
-                  aria-label="Select User"
+                // <select
+                //   type="text"
+                //   className="form-select"
+                //   aria-label="Select User"
+                //   id="createBy"
+                //   name="createBy"
+                //   onChange={changeHandler}
+                // >
+                //   <option value="" selected>
+                //     Select User
+                //   </option>
+                //   {userList.map((user, index) => (
+                //     <option key={index} value={user.username}>
+                //       {user.username}
+                //     </option>
+                //   ))}
+                // </select>
+                <Autocomplete
+                  disablePortal
                   id="createBy"
                   name="createBy"
-                  onChange={changeHandler}
-                >
-                  <option value="" selected>
-                    Select User
-                  </option>
-                  {userList.map((user, index) => (
-                    <option key={index} value={user.username}>
-                      {user.username}
-                    </option>
-                  ))}
-                </select>
+                  options={userList.map((user) => user.username)}
+                  sx={{ width: 300 }}
+                  renderInput={(params) => (
+                    <TextField {...params} label="Select User" />
+                  )}
+                  onChange={changeUsernameHandler}
+                />
               ) : (
                 <select
                   type="text"
@@ -184,67 +219,112 @@ function DocsList() {
             Search
           </button>
         </div>
-        <table className="table border shadow">
-          <thead>
-            <tr>
-              <th scope="col">#</th>
-              <th scope="col">Category</th>
-              <th scope="col">Filename</th>
-              <th scope="col">Description</th>
-              <th scope="col">Create by</th>
-              <th scope="col">Create Date</th>
-              <th scope="col">Remark</th>
-              <th scope="col">Action</th>
-            </tr>
-          </thead>
-          <tbody>
-            {docsList ? (
-              docsList.map((docsList, index) => (
-                <tr>
-                  <th scope="row" key={index}>
-                    {index + 1}
-                  </th>
-                  <td>{docsList.category}</td>
-                  <td>{docsList.filename}</td>
-                  <td>{docsList.desc}</td>
-                  {/* {setRole(user.roles)} */}
-                  <td>{docsList.createBy}</td>
-                  <td>{docsList.createDT}</td>
-                  <td>{docsList.remark}</td>
+        <div className="table-responsive">
+          <table className="table border shadow table-striped">
+            <thead>
+              <tr>
+                <th scope="col">#</th>
+                <th scope="col">Category</th>
+                <th scope="col">Filename</th>
+                <th scope="col">Description</th>
+                <th scope="col">Create by</th>
+                <th scope="col">Create Date</th>
+                <th scope="col">Remark</th>
+                <th scope="col">Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              {docsList ? (
+                docsList.map((docsList, index) => (
+                  <tr>
+                    <th scope="row" key={index}>
+                      {index + 1}
+                    </th>
+                    <td>{docsList.category}</td>
+                    <td>{docsList.filename}</td>
+                    <td>{docsList.desc}</td>
+                    {/* {setRole(user.roles)} */}
+                    <td>{docsList.createBy}</td>
+                    <td>{docsList.createDT}</td>
+                    <td>{docsList.remark}</td>
 
-                  <td>
-                    {/* <Link
+                    <td>
+                      {/* <Link
                     className="btn btn-primary mx-1"
                     to={`/viewuser/${user.id}`}
                   >
                     View
                   </Link> */}
-                    {/* <Link
+                      {/* <Link
                     className="btn btn-outline-primary mx-1"
                     to={`/edituser/${user.id}`}
                   >
                     Edit
                   </Link> */}
-                    <button
-                      className="btn btn-primary mx-1"
-                      onClick={() => downloadDocsHandler(index + 1)}
-                    >
-                      Download
-                    </button>
+                      <button
+                        className="btn btn-primary mx-1"
+                        onClick={() => downloadDocsHandler(index + 1)}
+                      >
+                        Download
+                      </button>
 
-                    <button className="btn btn-danger mx-1">Delete</button>
-                  </td>
+                      <button
+                        className="btn btn-danger mx-1"
+                        onClick={() => {
+                          setShowDelete(true);
+                          console.log(showDelete);
+                        }}
+                      >
+                        Delete
+                      </button>
+                      <Modal
+                        show={showDelete}
+                        onHide={() => {
+                          setShowDelete(false);
+                        }}
+                      >
+                        <Modal.Header closeButton>
+                          <Modal.Title>Save Confirmation</Modal.Title>
+                        </Modal.Header>
+                        <Modal.Body>
+                          Woohoo, Are you sure to Delete the
+                          {docsList.filename}?
+                        </Modal.Body>
+                        <Modal.Footer>
+                          <button
+                            variant="secondary"
+                            className="btn btn-primary"
+                            onClick={() => {
+                              setShowDelete(false);
+                            }}
+                          >
+                            Close
+                          </button>
+                          <button
+                            variant="secondary"
+                            className="btn btn-danger"
+                            onClick={() => {
+                              deleteDocsHandler(docsList.refNo);
+                              setShowDelete(false);
+                            }}
+                          >
+                            Delete
+                          </button>
+                        </Modal.Footer>
+                      </Modal>
+                    </td>
+                  </tr>
+                ))
+              ) : (
+                <tr>
+                  <div className="spinner-border m-5" role="status">
+                    <span className="sr-only">Loading...</span>
+                  </div>
                 </tr>
-              ))
-            ) : (
-              <tr>
-                <div className="spinner-border m-5" role="status">
-                  <span className="sr-only">Loading...</span>
-                </div>
-              </tr>
-            )}
-          </tbody>
-        </table>
+              )}
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
   );

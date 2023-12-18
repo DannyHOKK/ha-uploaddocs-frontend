@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import WORD_IMAGE from "../../img/word_image.png";
 import "react-toastify/dist/ReactToastify.css";
 import { useAuth } from "../../api/AuthContext";
+import { DarkMode } from "../../views/DarkMode";
 
 function HaNavbar() {
   const [currentUser, setCurrentUser] = useState(false);
@@ -25,7 +26,7 @@ function HaNavbar() {
   };
 
   return (
-    <nav className="navbar flex-lg-column navbar-expand-lg navbar-light bg-light p-4 ">
+    <nav className="navbar flex-lg-column navbar-expand-lg navbar-light p-4 ">
       <div className="container-fluid justify-content-between">
         <div className=" navbar-brand">
           <a className="navbar-brand " href="#">
@@ -126,6 +127,7 @@ function HaNavbar() {
             )}
           </ul>
         </div>
+        {/* <DarkMode /> */}
       </div>
     </nav>
   );
