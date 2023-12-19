@@ -57,8 +57,8 @@ function HaNavbar() {
               </a>
             </li>
             <li className="nav-item px-2">
-              <a className="nav-link" href="/uploadDocs">
-                Upload Docs
+              <a className="nav-link" href="/bookingSystem">
+                Booking System
               </a>
             </li>
             <li className="nav-item px-2">
@@ -66,39 +66,6 @@ function HaNavbar() {
                 Docs List
               </a>
             </li>
-            {/* <li className="nav-item px-2 dropdown">
-              <a
-                className="nav-link dropdown-toggle"
-                href="#"
-                id="navbarDropdownMenuLink"
-                role="button"
-                data-bs-toggle="dropdown"
-                aria-expanded="false"
-              >
-                Dropdown link
-              </a>
-              <ul
-                className="dropdown-menu"
-                aria-labelledby="navbarDropdownMenuLink"
-              >
-                <li>
-                  <a className="dropdown-item" href="#">
-                    Action
-                  </a>
-                </li>
-                <li>
-                  <a className="dropdown-item" href="#">
-                    Another action
-                  </a>
-                </li>
-                <li>
-                  <a className="dropdown-item" href="#">
-                    Something else here
-                  </a>
-                </li>
-              </ul>
-            </li> */}
-
             <li className="nav-item px-2">
               <a className="nav-link" href="/userList">
                 User List

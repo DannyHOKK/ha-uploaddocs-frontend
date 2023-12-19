@@ -2,7 +2,30 @@ import React, { useState } from "react";
 import { useRef, useEffect } from "react";
 import { MDBFile, MDBInput, MDBBtn } from "mdb-react-ui-kit";
 import DocsService from "../api/DocsService";
-import { Modal } from "react-bootstrap";
+import { Button, DatePicker, Form, Input, Upload, message } from "antd";
+import TextArea from "antd/es/input/TextArea";
+import { UploadOutlined } from "@ant-design/icons";
+
+// const props = {
+//   name: "file",
+//   multiple: false,
+//   action: "https://run.mocky.io/v3/435e224c-44fb-4773-9faf-380c5e6a2188",
+//   onChange(info) {
+//     const { status } = info.file;
+//     if (status !== "uploading") {
+//       console.log(info.file.originFileObj, info.fileList);
+//     }
+//     if (status === "done") {
+//       message.success(`${info.file.name} file uploaded successfully.`);
+//     } else if (status === "error") {
+//       message.error(`${info.file.name} file upload failed.`);
+//       console.log("error" + info.file);
+//     }
+//   },
+//   onDrop(e) {
+//     console.log("Dropped files", e.dataTransfer.files);
+//   },
+// };
 
 function UploadDocs() {
   const inputRef = useRef();
@@ -21,101 +44,100 @@ function UploadDocs() {
       [name]: value,
     }));
   };
+  const [loadings, setLoadings] = useState(false);
 
   const docsHandler = (e) => {
+    console.log(e.target.files[0]);
     setDocsData(e.target.files[0]);
   };
 
   const submitHandler = (e) => {
     e.preventDefault();
-    if (docsData !== null) {
-      console.log(docsData);
-      const formData = new FormData();
-      formData.append("file", docsData);
-      formData.append("fileDetails", JSON.stringify(details));
-      DocsService.uploadDocs(formData);
-      setShow(true);
-    } else {
-      alert("Please Upload Docs! ");
-    }
-  };
+    console.log(docsData);
+    setLoadings(true);
 
-  const clickHandler = (e) => {
-    setShow(false);
-    window.location.reload();
+    setTimeout(() => {
+      setLoadings(false);
+      if (docsData !== null) {
+        const formData = new FormData();
+        formData.append("file", docsData);
+        formData.append("fileDetails", JSON.stringify(details));
+        DocsService.uploadDocs(formData);
+        message.success("Submit success!");
+        setDetails({});
+      } else {
+        message.error("Please Upload Docs!");
+      }
+    }, 2000);
   };
 
   useEffect(() => {
     inputRef.current.focus();
   }, []);
+
+  const onFinishFailed = () => {
+    message.error("Submit failed!");
+  };
+
   return (
     <>
-      <section className="vh-100">
-        <div className=" m-5 container ">
-          <form>
-            <select
-              className="form-select"
-              aria-label="Select Docs Type"
-              name="category"
-              onChange={changeHandler}
-            >
-              <option value="" disabled selected>
-                Select Docs Type
-              </option>
-              <option value="pdf">PDF</option>
-              <option value="excel">EXCEL</option>
-              <option value="word">WORD</option>
-            </select>
-            <MDBInput
-              className=" mt-4"
-              wrapperClass="mb-4"
+      <div className="mt-5 container">
+        <Form
+          labelCol={{
+            span: 6,
+          }}
+          wrapperCol={{
+            span: 14,
+          }}
+          layout="horizontal"
+          style={{
+            maxWidth: 1200,
+          }}
+          autoComplete="off"
+          onFinishFailed={onFinishFailed}
+        >
+          <Form.Item
+            ref={inputRef}
+            name="Description"
+            label="Description"
+            rules={[{ required: true }, { type: "string", min: 6 }]}
+          >
+            <Input
               ref={inputRef}
-              label="Description"
-              id="form1"
               name="desc"
               type="desc"
               value={details.desc}
               onChange={changeHandler}
-            ></MDBInput>
-
-            <MDBFile
-              label="Upload Docs"
-              id="file"
-              name="file"
-              type="file"
-              onChange={docsHandler}
             />
-
-            <MDBInput
-              className=" mt-4"
-              wrapperClass="mb-4"
+          </Form.Item>
+          <Form.Item label="DatePicker">
+            <DatePicker />
+          </Form.Item>
+          <Form.Item label="Remarks">
+            <TextArea
+              rows={4}
               label="Remarks"
-              id="form1"
               name="remark"
               type="remark"
               value={details.remark}
               onChange={changeHandler}
-            ></MDBInput>
-            <MDBBtn className="mb-4 w-100" onClick={submitHandler}>
-              Submit
-            </MDBBtn>
-            <Modal
-              show={show}
-              onHide={() => {
-                setShow(false);
-              }}
+            />
+          </Form.Item>
+          <Form.Item label="Upload">
+            <MDBFile id="file" name="file" type="file" onChange={docsHandler} />
+          </Form.Item>
+          <Form.Item>
+            <Button
+              onClick={submitHandler}
+              type="primary"
+              style={{ marginLeft: "180px" }}
+              loading={loadings}
             >
-              <Modal.Header closeButton></Modal.Header>
-              <Modal.Body>Upload Success!</Modal.Body>
-              <Modal.Footer>
-                <button className="btn btn-primary" onClick={clickHandler}>
-                  Close
-                </button>
-              </Modal.Footer>
-            </Modal>
-          </form>
-        </div>
-      </section>
+              Submit
+            </Button>
+          </Form.Item>
+        </Form>
+      </div>
     </>
   );
 }
