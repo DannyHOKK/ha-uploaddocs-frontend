@@ -123,17 +123,17 @@ function BookingSystem() {
       area: "282",
     },
     {
-      venueName: "會議室204",
+      venueName: "會議室205",
       headCount: "25",
       area: "284",
     },
     {
-      venueName: "會議室204",
+      venueName: "會議室206",
       headCount: "25",
       area: "284",
     },
     {
-      venueName: "會議室204",
+      venueName: "會議室207",
       headCount: "25",
       area: "284",
     },
@@ -177,11 +177,11 @@ function BookingSystem() {
         </div>
         <div className="background-image">
           <div className="booking-container">
-            <div>搜尋結果: {} </div>
+            <h5>搜尋結果: {} </h5>
             <div className="booking-search">
               <DatePicker
                 style={{
-                  width: "100%",
+                  width: "160px",
                 }}
                 onChange={dateChangeHandler}
                 picker="month"
@@ -190,7 +190,7 @@ function BookingSystem() {
               <Select
                 mode="multiple"
                 style={{
-                  width: "100%",
+                  width: "160px",
                   borderColor: "black",
                   color: "blue",
                   fontWeight: "bold",
@@ -203,9 +203,9 @@ function BookingSystem() {
               />
 
               <Select
-                mode="tags"
+                mode="multiple"
                 style={{
-                  width: "100%",
+                  width: "160px",
                 }}
                 name="ppl"
                 placeholder="人數"
@@ -213,9 +213,9 @@ function BookingSystem() {
                 options={headcountOptions}
               />
               <Select
-                mode="tags"
+                mode="multiple"
                 style={{
-                  width: "100%",
+                  width: "160px",
                 }}
                 name="ppl"
                 placeholder="週日/週末"
@@ -231,7 +231,9 @@ function BookingSystem() {
                   <img src={venue1} />
                 </div>
                 <div className="venue-card-text">
-                  <h6>{venue.venueName}</h6>
+                  <h6>
+                    <strong>{venue.venueName}</strong>
+                  </h6>
                   <p>
                     容納人數: {venue.headCount} <br />
                     面積(平方呎): {venue.area}
