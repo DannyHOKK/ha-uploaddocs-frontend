@@ -26,11 +26,11 @@ function HaNavbar() {
   };
 
   return (
-    <nav className="navbar flex-lg-column navbar-expand-lg navbar-light p-4 ">
+    <nav className="navbar flex-lg-column navbar-expand-lg navbar-light ">
       <div className="container-fluid justify-content-between">
         <div className=" navbar-brand">
           <a className="navbar-brand " href="#">
-            <img src={WORD_IMAGE} alt="" width="40" height="40" />
+            <img src={WORD_IMAGE} alt="" width="40" />
             File Upload Application
           </a>
         </div>

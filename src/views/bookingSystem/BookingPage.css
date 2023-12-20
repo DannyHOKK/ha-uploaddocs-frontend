@@ -1,0 +1,68 @@
+.booking-page-container {
+  background-image: url(/src/img/venueBackground.png);
+  height: 100vh;
+  margin: 0 15% 0 15%;
+}
+
+.booking-page-carosuel {
+  margin-bottom: 40px;
+}
+
+.event-details-container {
+  text-align: start;
+}
+
+.event-details-container ol {
+  margin: 0;
+  text-align: start;
+  margin-bottom: 10px;
+}
+.event-details-container table {
+  background-color: white;
+}
+.time-select {
+  text-align: start;
+}
+
+.time-box-container {
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+}
+
+.time-box {
+  margin: 20px 20px 20px 20px;
+  vertical-align: middle;
+  text-align: center;
+  background-color: white;
+  border: 1px solid orange;
+  border-radius: 6px;
+  width: 244px;
+  height: 86px;
+  line-height: 2;
+}
+.time-box p {
+  margin-top: 8px;
+  font-size: 10px;
+}
+
+.input-details-container {
+  text-align: start;
+}
+
+.form {
+  margin-top: 20px;
+}
+
+.other-container {
+  text-align: start;
+}
+
+.finish-button {
+  display: flex;
+  justify-content: start;
+}
+.finish-button label {
+  width: 100%;
+  margin-bottom: 100px;
+}

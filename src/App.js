@@ -17,6 +17,7 @@ import DocsList from "./views/DocsList";
 import UserList from "./views/UserList";
 import "./App.css";
 import BookingSystem from "./views/bookingSystem/BookingSystem";
+import BookingPage from "./views/bookingSystem/BookingPage";
 
 function App() {
   useEffect(() => {
@@ -74,6 +75,7 @@ function App() {
               <Route path="" element={<PersonalProfile />} />
               <Route path="uploadDocs" element={<UploadDocs />} />
               <Route path="bookingSystem" element={<BookingSystem />} />
+              <Route path="bookingPage" element={<BookingPage />} />
               <Route path="docsList" element={<DocsList />} />
               <Route path="userList" element={<UserList />} />
               <Route path="userDetails" element={<PersonalProfile />} />
