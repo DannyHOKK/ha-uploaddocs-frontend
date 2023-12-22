@@ -1,6 +1,6 @@
 .booking-page-container {
   background-image: url(/src/img/venueBackground.png);
-  height: 100vh;
+  height: 100%;
   margin: 0 15% 0 15%;
 }
 
@@ -9,6 +9,7 @@
 }
 
 .event-details-container {
+  line-height: 2;
   text-align: start;
 }
 
@@ -18,8 +19,34 @@
   margin-bottom: 10px;
 }
 .event-details-container table {
+  font-size: 14px;
+  width: 100%;
+  margin-top: 20px;
+  border: 1px solid orange;
   background-color: white;
 }
+.event-details-container table tbody tr th {
+  line-height: 2;
+  padding: 25px 0 25px 20px;
+}
+
+.additional-item {
+  margin-top: 15px;
+  display: flex;
+  justify-content: start;
+}
+.additional-item-card {
+  font-size: 14px;
+  background-color: white;
+  border: 1px solid orange;
+  line-height: 1.8;
+  padding: 10px 140px 10px 20px;
+  margin-right: 20px;
+}
+.additional-item-card p {
+  margin: 0 0 6px 0;
+}
+
 .time-select {
   text-align: start;
 }
@@ -31,7 +58,7 @@
 }
 
 .time-box {
-  margin: 20px 20px 20px 20px;
+  margin: 20px 6px 20px 6px;
   vertical-align: middle;
   text-align: center;
   background-color: white;
