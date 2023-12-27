@@ -10,13 +10,16 @@ import {
   Row,
   Select,
 } from "antd";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import "./BookingPage.css";
 import bookingPage1 from "../../img/bookingPage1.png";
 import dayjs from "dayjs";
 import { Button } from "@mui/material";
 import LocalAtmIcon from "@mui/icons-material/LocalAtm";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
+import { additional_item, stage_item } from "./items/items";
+import { BookingPageContext } from "./BookingPageContext";
+import QuantityBtn from "./QuantityBtn";
 
 function BookingPage() {
   const data = [
@@ -30,10 +33,12 @@ function BookingPage() {
       alt: "Image 3 for carousel",
     },
   ];
+
   const [value, setValue] = useState(() => dayjs().endOf("today"));
   const [selectedValue, setSelectedValue] = useState(() =>
     dayjs().endOf("today")
   );
+
   const onSelect = (newValue) => {
     setValue(newValue);
     setSelectedValue(newValue);
@@ -41,6 +46,7 @@ function BookingPage() {
   const onPanelChange = (newValue) => {
     setValue(newValue);
   };
+
   return (
     <div className="booking-page-container">
       <div style={{ margin: "0 6% 0 6%" }}>
@@ -292,6 +298,61 @@ function BookingPage() {
           </div>
           <div>已選時段:</div>
         </div>
+        <Divider />
+        <table className="item-table">
+          <tbody>
+            <tr>
+              <th>
+                <span style={{ color: "red" }}>*</span>選擇設備
+              </th>
+              <th>選擇附加物件</th>
+            </tr>
+            <tr>
+              <td>
+                <div className="item-card">
+                  <div className="item-card-header">基本套餐一</div>
+                  {stage_item.map((item) => (
+                    <div className="item-count">
+                      {/* <strong style={{ fontWeight: "900" }}>{item.name}</strong>
+                      <span>
+                        <a>
+                          <RemoveIcon />
+                        </a>
+                        {"  "}0/{item.quantity}
+                        {"  "}
+                        <a>
+                          <AddIcon />
+                        </a>
+                      </span> */}
+                      <QuantityBtn product={item} />
+                    </div>
+                  ))}
+                  <div className="item-cost">HK$450</div>
+                </div>
+              </td>
+              <td>
+                <div className="item-card">
+                  {additional_item.map((item) => (
+                    <div className="item-count">
+                      {/* <strong style={{ fontWeight: "900" }}>{item.name}</strong>
+                      <span>
+                        <a>
+                          <RemoveIcon />
+                        </a>
+                        {"  "}0/{item.quantity}
+                        {"  "}
+                        <a>
+                          <AddIcon />
+                        </a>
+                      </span> */}
+                      <QuantityBtn product={item} />
+                    </div>
+                  ))}
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
         <Divider />
         <div className="input-details-container">
           <h3>

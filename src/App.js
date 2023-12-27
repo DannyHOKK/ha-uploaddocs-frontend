@@ -1,4 +1,4 @@
-import React, { useEffect, Fragment } from "react";
+import React, { useEffect, Fragment, useState } from "react";
 import {
   BrowserRouter as Router,
   Route,
@@ -18,8 +18,11 @@ import UserList from "./views/UserList";
 import "./App.css";
 import BookingSystem from "./views/bookingSystem/BookingSystem";
 import BookingPage from "./views/bookingSystem/BookingPage";
+import { BookingPageContext } from "./views/bookingSystem/BookingPageContext";
 
 function App() {
+  const [cartItems, setCartItems] = useState([]);
+
   useEffect(() => {
     if (localStorage.getItem("loginAlert") === "true") {
       notifyLogin();
@@ -69,30 +72,35 @@ function App() {
     <div className="App">
       <Router>
         <Fragment>
-          <HaNavbar />
-          <Routes>
-            <Route exact path="/" element={<PrivateRoute />}>
-              <Route path="" element={<PersonalProfile />} />
-              <Route path="uploadDocs" element={<UploadDocs />} />
-              <Route path="bookingSystem" element={<BookingSystem />} />
-              <Route path="bookingPage" element={<BookingPage />} />
-              <Route path="docsList" element={<DocsList />} />
-              <Route path="userList" element={<UserList />} />
-              <Route path="userDetails" element={<PersonalProfile />} />
-              <Route path="userDetails/editProfile" element={<EditProfile />} />
-            </Route>
-            <Route
-              path="login"
-              element={
-                checkAuthenticated() ? <Navigate to="/" /> : <LoginRegister />
-              }
-            />
+          <BookingPageContext.Provider value={{ cartItems, setCartItems }}>
+            <HaNavbar />
+            <Routes>
+              <Route exact path="/" element={<PrivateRoute />}>
+                <Route path="" element={<PersonalProfile />} />
+                <Route path="uploadDocs" element={<UploadDocs />} />
+                <Route path="bookingSystem" element={<BookingSystem />} />
+                <Route path="bookingPage" element={<BookingPage />} />
+                <Route path="docsList" element={<DocsList />} />
+                <Route path="userList" element={<UserList />} />
+                <Route path="userDetails" element={<PersonalProfile />} />
+                <Route
+                  path="userDetails/editProfile"
+                  element={<EditProfile />}
+                />
+              </Route>
+              <Route
+                path="login"
+                element={
+                  checkAuthenticated() ? <Navigate to="/" /> : <LoginRegister />
+                }
+              />
 
-            <Route
-              path="/*"
-              element={<Navigate to="userDetails" />} // Redirect to userDetails for unknown routes
-            />
-          </Routes>
+              <Route
+                path="/*"
+                element={<Navigate to="userDetails" />} // Redirect to userDetails for unknown routes
+              />
+            </Routes>
+          </BookingPageContext.Provider>
         </Fragment>
       </Router>
       <ToastContainer />

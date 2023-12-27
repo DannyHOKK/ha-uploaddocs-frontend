@@ -93,3 +93,39 @@
   width: 100%;
   margin-bottom: 100px;
 }
+.item-table {
+  font-size: 14px;
+  width: 100%;
+  margin-top: 20px;
+  text-align: start;
+}
+.item-table th {
+  font-size: 24px;
+  padding-bottom: 20px;
+}
+.item-table td {
+  vertical-align: top;
+}
+.item-card {
+  background-color: white;
+  border: 1px solid grey;
+  margin-right: 38px;
+}
+.item-card-header {
+  background-color: #e0e0e0;
+  border-radius: 4px;
+  margin: 15px;
+  padding: 8px;
+}
+.item-count {
+  margin: 12px 20px;
+  display: flex;
+  justify-content: space-between;
+}
+.item-count svg {
+  font-size: 20px;
+}
+.item-cost {
+  margin: 20px 20px 10px 20px;
+  font-weight: 900;
+}

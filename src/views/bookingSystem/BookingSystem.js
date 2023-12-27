@@ -138,6 +138,7 @@ function BookingSystem() {
       area: "284",
     },
   ];
+
   const dateChangeHandler = (e) => {};
 
   const venueHandler = (e) => {
@@ -226,20 +227,22 @@ function BookingSystem() {
           </div>
           <div className="venue-card-container">
             {venueDetails.map((venue, index) => (
-              <div className="venue-card">
-                <div>
-                  <img src={venue1} />
+              <a href="/bookingPage">
+                <div className="venue-card">
+                  <div>
+                    <img src={venue1} />
+                  </div>
+                  <div className="venue-card-text">
+                    <h6>
+                      <strong>{venue.venueName}</strong>
+                    </h6>
+                    <p>
+                      容納人數: {venue.headCount} <br />
+                      面積(平方呎): {venue.area}
+                    </p>
+                  </div>
                 </div>
-                <div className="venue-card-text">
-                  <h6>
-                    <strong>{venue.venueName}</strong>
-                  </h6>
-                  <p>
-                    容納人數: {venue.headCount} <br />
-                    面積(平方呎): {venue.area}
-                  </p>
-                </div>
-              </div>
+              </a>
             ))}
           </div>
         </div>
