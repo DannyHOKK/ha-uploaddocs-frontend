@@ -1,10 +1,12 @@
 import { Carousel, DatePicker, Select } from "antd";
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import slider1 from "../../img/slider1.png";
 import "./BookingSystem.css";
 import { Today } from "@mui/icons-material";
 import dayjs from "dayjs";
 import venue1 from "../../img/venue1.png";
+import ExpandLessIcon from "@mui/icons-material/ExpandLess";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 
 function BookingSystem() {
   const [filter, setFilter] = useState({
@@ -138,6 +140,7 @@ function BookingSystem() {
       area: "284",
     },
   ];
+
   const dateChangeHandler = (e) => {};
 
   const venueHandler = (e) => {
@@ -169,6 +172,43 @@ function BookingSystem() {
     console.log(`Deselected: ${value}`);
     // Perform additional actions when an item is deselected
   };
+  const checkBoxShowHandler = () => {
+    const check = document.getElementsByClassName("checkbox");
+    const checkboxList = document.getElementsByClassName("checkbox-list");
+    console.log(check[0].style.display);
+    if (check[0].style.display === "none") {
+      check[0].style.display = "block";
+      checkboxList[0].style.borderColor = "grey";
+      console.log("hack");
+    }
+  };
+
+  const [open1, setOpen1] = useState(false);
+  const [open2, setOpen2] = useState(false);
+  const [open3, setOpen3] = useState(false);
+  const [open4, setOpen4] = useState(false);
+
+  let menuRef = useRef();
+  let menuRef2 = useRef();
+  let menuRef3 = useRef();
+  let menuRef4 = useRef();
+
+  useEffect(() => {
+    let handler = (e) => {
+      console.log("big");
+      if (!menuRef.current.contains(e.target)) {
+        setOpen1(false);
+      }
+      if (!menuRef2.current.contains(e.target)) {
+        setOpen2(false);
+      }
+      if (!menuRef3.current.contains(e.target)) {
+        setOpen3(false);
+      }
+    };
+    document.addEventListener("mousedown", handler);
+  }, []);
+
   return (
     <>
       <div style={{ margin: "0 15% 0 15%" }}>
@@ -187,41 +227,159 @@ function BookingSystem() {
                 picker="month"
                 disabledDate={disabledDate}
               />
-              <Select
-                mode="multiple"
-                style={{
-                  width: "160px",
-                  borderColor: "black",
-                  color: "blue",
-                  fontWeight: "bold",
-                }}
-                name="venue"
-                placeholder="場地"
-                onChange={venueHandler}
-                options={venueOptions}
-                onDeselect={handleDeselect}
-              />
+              <div ref={menuRef}>
+                <ul className={`checkbox-list ${open1 ? "active-border" : ""}`}>
+                  <li
+                    tabindex="0"
+                    onClick={() => {
+                      setOpen1(!open1);
+                    }}
+                  >
+                    <strong>場地種類</strong>{" "}
+                    {open1 ? (
+                      <ExpandLessIcon style={{ width: "17px" }} />
+                    ) : (
+                      <ExpandMoreIcon style={{ width: "17px" }} />
+                    )}
+                  </li>
+                  <li>
+                    <ul
+                      className={`checkbox ${
+                        open1 ? "box-active" : "inactive"
+                      } `}
+                    >
+                      <li tabindex="0">
+                        <input type="checkbox" id="all" />
+                        <label for="all">所有</label>
+                      </li>
+                      <li tabindex="0">
+                        <input type="checkbox" id="venue1" />
+                        <label for="venue1">會議室</label>
+                      </li>
+                      <li tabindex="0">
+                        <input type="checkbox" id="venue2" />
+                        <label for="venue2">活動室</label>
+                      </li>
+                      <li tabindex="0">
+                        <input type="checkbox" id="venue3" />
+                        <label for="venue3">演講廳</label>
+                      </li>
+                      <li tabindex="0">
+                        <input type="checkbox" id="venue4" />
+                        <label for="venue4">禮堂</label>
+                      </li>
+                      <li tabindex="0">
+                        <input type="checkbox" id="venue5" />
+                        <label for="venue5">大堂</label>
+                      </li>
+                    </ul>
+                  </li>
+                </ul>
+              </div>
 
-              <Select
-                mode="multiple"
-                style={{
-                  width: "160px",
-                }}
-                name="ppl"
-                placeholder="人數"
-                onChange={headcountHandler}
-                options={headcountOptions}
-              />
-              <Select
-                mode="multiple"
-                style={{
-                  width: "160px",
-                }}
-                name="ppl"
-                placeholder="週日/週末"
-                onChange={headcountHandler}
-                options={weekdayOptions}
-              />
+              <div ref={menuRef2}>
+                <ul className={`checkbox-list ${open2 ? "active-border" : ""}`}>
+                  <li
+                    tabindex="0"
+                    onClick={() => {
+                      setOpen2(!open2);
+                    }}
+                  >
+                    <strong>人數</strong>
+                    {open2 ? (
+                      <ExpandLessIcon style={{ width: "17px" }} />
+                    ) : (
+                      <ExpandMoreIcon style={{ width: "17px" }} />
+                    )}
+                  </li>
+                  <li>
+                    <ul
+                      className={`checkbox ${
+                        open2 ? "box-active" : "inactive"
+                      } `}
+                    >
+                      <li tabindex="0">
+                        <input type="checkbox" id="all2" />
+                        <label for="all2">所有</label>
+                      </li>
+                      <li tabindex="0">
+                        <input type="checkbox" id="30" />
+                        <label for="30"> &lt;30 </label>
+                      </li>
+                      <li tabindex="0">
+                        <input type="checkbox" id="50" />
+                        <label for="50">30-50</label>
+                      </li>
+                      <li tabindex="0">
+                        <input type="checkbox" id="100" />
+                        <label for="100">50-100</label>
+                      </li>
+                      <li tabindex="0">
+                        <input type="checkbox" id="101" />
+                        <label for="101">&gt;100</label>
+                      </li>
+                    </ul>
+                  </li>
+                </ul>
+              </div>
+
+              <div ref={menuRef3}>
+                <ul className={`checkbox-list ${open3 ? "active-border" : ""}`}>
+                  <li
+                    tabindex="0"
+                    onClick={() => {
+                      setOpen3(!open3);
+                    }}
+                  >
+                    <strong>週日/週末</strong>{" "}
+                    {open3 ? (
+                      <ExpandLessIcon style={{ width: "17px" }} />
+                    ) : (
+                      <ExpandMoreIcon style={{ width: "17px" }} />
+                    )}
+                  </li>
+                  <li>
+                    <ul
+                      className={`checkbox ${
+                        open3 ? "box-active" : "inactive"
+                      } `}
+                    >
+                      <li tabindex="0">
+                        <input type="checkbox" id="all3" />
+                        <label for="all3">所有</label>
+                      </li>
+                      <li tabindex="0">
+                        <input type="checkbox" id="mon" />
+                        <label for="mon">週一</label>
+                      </li>
+                      <li tabindex="0">
+                        <input type="checkbox" id="tue" />
+                        <label for="tue">週二</label>
+                      </li>
+                      <li tabindex="0">
+                        <input type="checkbox" id="wed" />
+                        <label for="wed">週三</label>
+                      </li>
+                      <li tabindex="0">
+                        <input type="checkbox" id="thr" />
+                        <label for="thr">週四</label>
+                      </li>
+                      <li tabindex="0">
+                        <input type="checkbox" id="fri" />
+                        <label for="fri">週五</label>
+                      </li>
+                      <li tabindex="0">
+                        <input type="checkbox" id="sat" />
+                        <label for="sat">週六</label>
+                      </li>
+                      <li tabindex="0">
+                        <input type="checkbox" id="sun" />
+                        <label for="sun">週日</label>
+                      </li>
+                    </ul>
+                  </li>
+                </ul>
+              </div>
             </div>
           </div>
           <div className="venue-card-container">
