@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import WORD_IMAGE from "../../img/word_image.png";
 import "react-toastify/dist/ReactToastify.css";
 import { useAuth } from "../../api/AuthContext";
+import { DarkMode } from "../../views/DarkMode";
 
 function HaNavbar() {
   const [currentUser, setCurrentUser] = useState(false);
@@ -25,11 +26,11 @@ function HaNavbar() {
   };
 
   return (
-    <nav className="navbar flex-lg-column navbar-expand-lg navbar-light bg-light p-4 ">
+    <nav className="navbar flex-lg-column navbar-expand-lg navbar-light ">
       <div className="container-fluid justify-content-between">
         <div className=" navbar-brand">
           <a className="navbar-brand " href="#">
-            <img src={WORD_IMAGE} alt="" width="40" height="40" />
+            <img src={WORD_IMAGE} alt="" width="40" />
             File Upload Application
           </a>
         </div>
@@ -56,8 +57,8 @@ function HaNavbar() {
               </a>
             </li>
             <li className="nav-item px-2">
-              <a className="nav-link" href="/uploadDocs">
-                Upload Docs
+              <a className="nav-link" href="/bookingSystem">
+                Booking System
               </a>
             </li>
             <li className="nav-item px-2">
@@ -65,39 +66,6 @@ function HaNavbar() {
                 Docs List
               </a>
             </li>
-            {/* <li className="nav-item px-2 dropdown">
-              <a
-                className="nav-link dropdown-toggle"
-                href="#"
-                id="navbarDropdownMenuLink"
-                role="button"
-                data-bs-toggle="dropdown"
-                aria-expanded="false"
-              >
-                Dropdown link
-              </a>
-              <ul
-                className="dropdown-menu"
-                aria-labelledby="navbarDropdownMenuLink"
-              >
-                <li>
-                  <a className="dropdown-item" href="#">
-                    Action
-                  </a>
-                </li>
-                <li>
-                  <a className="dropdown-item" href="#">
-                    Another action
-                  </a>
-                </li>
-                <li>
-                  <a className="dropdown-item" href="#">
-                    Something else here
-                  </a>
-                </li>
-              </ul>
-            </li> */}
-
             <li className="nav-item px-2">
               <a className="nav-link" href="/userList">
                 User List
@@ -126,6 +94,7 @@ function HaNavbar() {
             )}
           </ul>
         </div>
+        {/* <DarkMode /> */}
       </div>
     </nav>
   );

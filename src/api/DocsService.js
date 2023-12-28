@@ -57,6 +57,22 @@ const downloadDocs = (id) => {
       headers: {
         Authorization: tokenHeader,
       },
+      responseType: "blob",
+    })
+    .then((res) => {
+      return res;
+    })
+    .catch((err) => {
+      return err;
+    });
+};
+
+const deleteDocsId = (id) => {
+  return axios
+    .post(API_URL + "/deleteDocs?refNo=" + id, "", {
+      headers: {
+        Authorization: tokenHeader,
+      },
     })
     .then((res) => {
       return res;
@@ -71,6 +87,7 @@ const DocsService = {
   getDocsList,
   searchDocsList,
   downloadDocs,
+  deleteDocsId,
 };
 
 export default DocsService;

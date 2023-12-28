@@ -1,0 +1,131 @@
+.booking-page-container {
+  background-image: url(/src/img/venueBackground.png);
+  height: 100%;
+  margin: 0 15% 0 15%;
+}
+
+.booking-page-carosuel {
+  margin-bottom: 40px;
+}
+
+.event-details-container {
+  line-height: 2;
+  text-align: start;
+}
+
+.event-details-container ol {
+  margin: 0;
+  text-align: start;
+  margin-bottom: 10px;
+}
+.event-details-container table {
+  font-size: 14px;
+  width: 100%;
+  margin-top: 20px;
+  border: 1px solid orange;
+  background-color: white;
+}
+.event-details-container table tbody tr th {
+  line-height: 2;
+  padding: 25px 0 25px 20px;
+}
+
+.additional-item {
+  margin-top: 15px;
+  display: flex;
+  justify-content: start;
+}
+.additional-item-card {
+  font-size: 14px;
+  background-color: white;
+  border: 1px solid orange;
+  line-height: 1.8;
+  padding: 10px 140px 10px 20px;
+  margin-right: 20px;
+}
+.additional-item-card p {
+  margin: 0 0 6px 0;
+}
+
+.time-select {
+  text-align: start;
+}
+
+.time-box-container {
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+}
+
+.time-box {
+  margin: 20px 6px 20px 6px;
+  vertical-align: middle;
+  text-align: center;
+  background-color: white;
+  border: 1px solid orange;
+  border-radius: 6px;
+  width: 244px;
+  height: 86px;
+  line-height: 2;
+}
+.time-box p {
+  margin-top: 8px;
+  font-size: 10px;
+}
+
+.input-details-container {
+  text-align: start;
+}
+
+.form {
+  margin-top: 20px;
+}
+
+.other-container {
+  text-align: start;
+}
+
+.finish-button {
+  display: flex;
+  justify-content: start;
+}
+.finish-button label {
+  width: 100%;
+  margin-bottom: 100px;
+}
+.item-table {
+  font-size: 14px;
+  width: 100%;
+  margin-top: 20px;
+  text-align: start;
+}
+.item-table th {
+  font-size: 24px;
+  padding-bottom: 20px;
+}
+.item-table td {
+  vertical-align: top;
+}
+.item-card {
+  background-color: white;
+  border: 1px solid grey;
+  margin-right: 38px;
+}
+.item-card-header {
+  background-color: #e0e0e0;
+  border-radius: 4px;
+  margin: 15px;
+  padding: 8px;
+}
+.item-count {
+  margin: 12px 20px;
+  display: flex;
+  justify-content: space-between;
+}
+.item-count svg {
+  font-size: 20px;
+}
+.item-cost {
+  margin: 20px 20px 10px 20px;
+  font-weight: 900;
+}
