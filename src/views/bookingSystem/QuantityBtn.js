@@ -20,7 +20,6 @@ const QuantityBtn = ({ product }) => {
           quantity: 1,
         },
       ]);
-      console.log("cartItems " + product.name);
     } else if (
       productIndexInCart !== -1 &&
       cartItems[productIndexInCart].quantity < product.quantity
@@ -28,23 +27,21 @@ const QuantityBtn = ({ product }) => {
       let newCartArray = [...cartItems];
       newCartArray[productIndexInCart].quantity++;
       setCartItems(newCartArray);
-      console.log(cartItems[productIndexInCart]);
     }
+    console.log("add: " + productIndexInCart);
   };
 
   const handleSubtract = () => {
     if (cartItems[productIndexInCart].quantity === 1) {
-      console.log("test");
       let newCartArray = [...cartItems];
-      newCartArray.splice(productIndexInCart);
+      newCartArray.splice(productIndexInCart, 1);
       setCartItems(newCartArray);
     } else {
       let newCartArray = [...cartItems];
       newCartArray[productIndexInCart].quantity--;
       setCartItems(newCartArray);
     }
-    console.log("quantity " + cartItems[productIndexInCart].quantity);
-    console.log(cartItems[productIndexInCart]);
+    console.log("subtract" + productIndexInCart);
   };
 
   useEffect(() => {
