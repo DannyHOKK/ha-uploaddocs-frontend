@@ -12,22 +12,22 @@ export const add_to_cart = (productId) => {
   };
 };
 
-export const cart_increment = (qty) => {
+export const cart_increment = (productId, qty) => {
   return {
     type: CART_INCREMENT,
-    payload: qty,
+    payload: { productId, qty },
   };
 };
 
-export const cart_decrement = (qty) => {
+export const cart_decrement = (productId, qty) => {
   return {
     type: CART_DECREMENT,
-    payload: qty,
+    payload: { productId, qty },
   };
 };
 
 export const empty_cart = () => {
   return {
-    type: EMPTY_CAR,
+    type: EMPTY_CART,
   };
 };
