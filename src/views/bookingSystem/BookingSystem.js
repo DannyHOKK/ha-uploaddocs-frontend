@@ -7,6 +7,8 @@ import dayjs from "dayjs";
 import venue1 from "../../img/venue1.png";
 import ExpandLessIcon from "@mui/icons-material/ExpandLess";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import BookingService from "../../api/BookingService";
+import blobToUrl from "../../utils/blobToUrl";
 
 function BookingSystem() {
   const [filter, setFilter] = useState({
@@ -187,6 +189,7 @@ function BookingSystem() {
   const [open2, setOpen2] = useState(false);
   const [open3, setOpen3] = useState(false);
   const [open4, setOpen4] = useState(false);
+  const [venue, setVeune] = useState([]);
 
   let menuRef = useRef();
   let menuRef2 = useRef();
@@ -194,8 +197,8 @@ function BookingSystem() {
   let menuRef4 = useRef();
 
   useEffect(() => {
+    getVenueList();
     let handler = (e) => {
-      console.log("big");
       if (!menuRef.current.contains(e.target)) {
         setOpen1(false);
       }
@@ -208,6 +211,15 @@ function BookingSystem() {
     };
     document.addEventListener("mousedown", handler);
   }, []);
+
+  const getVenueList = async () => {
+    const res = await BookingService.getVenueList();
+    setVeune(res.data.data);
+  };
+
+  const convertVenuePhoto = (photo) => {
+    return URL.createObjectURL(blobToUrl(photo));
+  };
 
   return (
     <>
@@ -383,23 +395,23 @@ function BookingSystem() {
             </div>
           </div>
           <div className="venue-card-container">
-            {venueDetails.map((venue, index) => (
-              <a href="/bookingPage">
-                <div className="venue-card">
+            {venue.map((venue) => (
+              <div className="venue-card">
+                <a href={"/bookingPage/" + venue.id}>
                   <div>
-                    <img src={venue1} />
+                    <img src={convertVenuePhoto(venue.photo)} />
                   </div>
                   <div className="venue-card-text">
                     <h6>
                       <strong>{venue.venueName}</strong>
                     </h6>
                     <p>
-                      容納人數: {venue.headCount} <br />
+                      容納人數: {venue.nop} <br />
                       面積(平方呎): {venue.area}
                     </p>
                   </div>
-                </div>
-              </a>
+                </a>
+              </div>
             ))}
           </div>
         </div>

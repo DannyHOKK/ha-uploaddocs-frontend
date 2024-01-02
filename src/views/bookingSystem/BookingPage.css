@@ -58,6 +58,7 @@
 }
 
 .time-box {
+  cursor: pointer;
   margin: 20px 6px 20px 6px;
   vertical-align: middle;
   text-align: center;
@@ -71,6 +72,16 @@
 .time-box p {
   margin-top: 8px;
   font-size: 10px;
+}
+
+.selected {
+  color: white;
+  background-color: #ff7414;
+}
+.item-booked {
+  cursor: auto;
+  border: 1px solid #c8c8c8;
+  background-color: #e0e0e0;
 }
 
 .input-details-container {
@@ -128,4 +139,8 @@
 .item-cost {
   margin: 20px 20px 10px 20px;
   font-weight: 900;
+}
+.item-header {
+  display: flex;
+  justify-content: space-between;
 }
