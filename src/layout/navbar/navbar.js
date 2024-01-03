@@ -3,10 +3,14 @@ import WORD_IMAGE from "../../img/word_image.png";
 import "react-toastify/dist/ReactToastify.css";
 import { useAuth } from "../../api/AuthContext";
 import { DarkMode } from "../../views/DarkMode";
+import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
+import { Badge } from "antd";
+import BookingService from "../../api/BookingService";
 
 function HaNavbar() {
   const [currentUser, setCurrentUser] = useState(false);
   const [user, setUser] = useState({});
+  const [bookingCartLength, setBookingCartLength] = useState("");
   const { logout } = useAuth();
 
   useEffect(() => {
@@ -18,7 +22,14 @@ function HaNavbar() {
       setCurrentUser(false);
       setUser({});
     }
+    cartLength(userDetails.id);
   }, []);
+
+  const cartLength = async (userId) => {
+    const res = await BookingService.getCart(userId);
+
+    setBookingCartLength(res.data.data.length);
+  };
 
   const signout = () => {
     logout();
@@ -26,7 +37,7 @@ function HaNavbar() {
   };
 
   return (
-    <nav className="navbar flex-lg-column navbar-expand-lg navbar-light ">
+    <nav className="navbar flex-lg-column navbar-expand-lg navbar-light">
       <div className="container-fluid justify-content-between">
         <div className=" navbar-brand">
           <a className="navbar-brand " href="#">
@@ -86,6 +97,14 @@ function HaNavbar() {
                     onClick={signout}
                   >
                     Log out
+                  </a>
+                </li>
+
+                <li className="nav-item px-2">
+                  <a className="nav-link" href="/booking/cart">
+                    <Badge count={bookingCartLength}>
+                      <ShoppingCartIcon />
+                    </Badge>
                   </a>
                 </li>
               </>

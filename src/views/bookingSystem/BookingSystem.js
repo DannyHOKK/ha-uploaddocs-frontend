@@ -242,7 +242,7 @@ function BookingSystem() {
               <div ref={menuRef}>
                 <ul className={`checkbox-list ${open1 ? "active-border" : ""}`}>
                   <li
-                    tabindex="0"
+                    tabIndex="0"
                     onClick={() => {
                       setOpen1(!open1);
                     }}
@@ -260,27 +260,27 @@ function BookingSystem() {
                         open1 ? "box-active" : "inactive"
                       } `}
                     >
-                      <li tabindex="0">
+                      <li tabIndex="0">
                         <input type="checkbox" id="all" />
                         <label for="all">所有</label>
                       </li>
-                      <li tabindex="0">
+                      <li tabIndex="0">
                         <input type="checkbox" id="venue1" />
                         <label for="venue1">會議室</label>
                       </li>
-                      <li tabindex="0">
+                      <li tabIndex="0">
                         <input type="checkbox" id="venue2" />
                         <label for="venue2">活動室</label>
                       </li>
-                      <li tabindex="0">
+                      <li tabIndex="0">
                         <input type="checkbox" id="venue3" />
                         <label for="venue3">演講廳</label>
                       </li>
-                      <li tabindex="0">
+                      <li tabIndex="0">
                         <input type="checkbox" id="venue4" />
                         <label for="venue4">禮堂</label>
                       </li>
-                      <li tabindex="0">
+                      <li tabIndex="0">
                         <input type="checkbox" id="venue5" />
                         <label for="venue5">大堂</label>
                       </li>
@@ -292,7 +292,7 @@ function BookingSystem() {
               <div ref={menuRef2}>
                 <ul className={`checkbox-list ${open2 ? "active-border" : ""}`}>
                   <li
-                    tabindex="0"
+                    tabIndex="0"
                     onClick={() => {
                       setOpen2(!open2);
                     }}
@@ -310,23 +310,23 @@ function BookingSystem() {
                         open2 ? "box-active" : "inactive"
                       } `}
                     >
-                      <li tabindex="0">
+                      <li tabIndex="0">
                         <input type="checkbox" id="all2" />
                         <label for="all2">所有</label>
                       </li>
-                      <li tabindex="0">
+                      <li tabIndex="0">
                         <input type="checkbox" id="30" />
                         <label for="30"> &lt;30 </label>
                       </li>
-                      <li tabindex="0">
+                      <li tabIndex="0">
                         <input type="checkbox" id="50" />
                         <label for="50">30-50</label>
                       </li>
-                      <li tabindex="0">
+                      <li tabIndex="0">
                         <input type="checkbox" id="100" />
                         <label for="100">50-100</label>
                       </li>
-                      <li tabindex="0">
+                      <li tabIndex="0">
                         <input type="checkbox" id="101" />
                         <label for="101">&gt;100</label>
                       </li>
@@ -338,7 +338,7 @@ function BookingSystem() {
               <div ref={menuRef3}>
                 <ul className={`checkbox-list ${open3 ? "active-border" : ""}`}>
                   <li
-                    tabindex="0"
+                    tabIndex="0"
                     onClick={() => {
                       setOpen3(!open3);
                     }}
@@ -356,35 +356,35 @@ function BookingSystem() {
                         open3 ? "box-active" : "inactive"
                       } `}
                     >
-                      <li tabindex="0">
+                      <li tabIndex="0">
                         <input type="checkbox" id="all3" />
                         <label for="all3">所有</label>
                       </li>
-                      <li tabindex="0">
+                      <li tabIndex="0">
                         <input type="checkbox" id="mon" />
                         <label for="mon">週一</label>
                       </li>
-                      <li tabindex="0">
+                      <li tabIndex="0">
                         <input type="checkbox" id="tue" />
                         <label for="tue">週二</label>
                       </li>
-                      <li tabindex="0">
+                      <li tabIndex="0">
                         <input type="checkbox" id="wed" />
                         <label for="wed">週三</label>
                       </li>
-                      <li tabindex="0">
+                      <li tabIndex="0">
                         <input type="checkbox" id="thr" />
                         <label for="thr">週四</label>
                       </li>
-                      <li tabindex="0">
+                      <li tabIndex="0">
                         <input type="checkbox" id="fri" />
                         <label for="fri">週五</label>
                       </li>
-                      <li tabindex="0">
+                      <li tabIndex="0">
                         <input type="checkbox" id="sat" />
                         <label for="sat">週六</label>
                       </li>
-                      <li tabindex="0">
+                      <li tabIndex="0">
                         <input type="checkbox" id="sun" />
                         <label for="sun">週日</label>
                       </li>

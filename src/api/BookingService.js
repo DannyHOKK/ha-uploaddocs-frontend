@@ -35,8 +35,24 @@ const getVenue = (venueId) => {
 };
 
 const createCart = (cart) => {
+  console.log("create log");
   return axios
     .post(API_URL + "/cart/create", cart, {
+      headers: {
+        Authorization: tokenHeader,
+      },
+    })
+    .then((res) => {
+      return res;
+    })
+    .catch((err) => {
+      return err;
+    });
+};
+
+const getCart = (userId) => {
+  return axios
+    .get(API_URL + "/cart/get?userId=" + userId, {
       headers: {
         Authorization: tokenHeader,
       },
@@ -53,6 +69,7 @@ const BookingService = {
   getVenueList,
   getVenue,
   createCart,
+  getCart,
 };
 
 export default BookingService;

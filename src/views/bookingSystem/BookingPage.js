@@ -7,6 +7,7 @@ import {
   Divider,
   Form,
   Input,
+  Modal,
   Row,
   Select,
 } from "antd";
@@ -22,8 +23,9 @@ import { BookingPageContext } from "./BookingPageContext";
 import QuantityBtn from "./QuantityBtn";
 import RemoveIcon from "@mui/icons-material/Remove";
 import AddIcon from "@mui/icons-material/Add";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import BookingService from "../../api/BookingService";
+import LoadingButton from "@mui/lab/LoadingButton";
 
 function BookingPage() {
   const data = [
@@ -106,10 +108,12 @@ function BookingPage() {
     venueUsage: "",
   });
   const { cartItems } = useContext(BookingPageContext);
-
+  const [openModal, setOpenModal] = useState(false);
   useEffect(() => {
     getVenue();
   }, []);
+  const [loadings, setLoadings] = useState(false);
+  const naviagte = useNavigate();
 
   function reducer(state, action) {
     switch (action.type) {
@@ -216,7 +220,13 @@ function BookingPage() {
       venueID: params.id,
     }));
 
-    setBookingCartSubmit(!bookingCartSubmit);
+    setLoadings(true);
+
+    setTimeout(() => {
+      setLoadings(false);
+      setBookingCartSubmit(!bookingCartSubmit);
+      setOpenModal(!openModal);
+    }, 2000);
   };
 
   useEffect(() => {
@@ -541,7 +551,7 @@ function BookingPage() {
           </div>
           <Divider />
           <div className="finish-button">
-            <Button
+            <LoadingButton
               component="label"
               variant="contained"
               style={{
@@ -551,9 +561,88 @@ function BookingPage() {
               }}
               startIcon={<ShoppingCartIcon />}
               onClick={bookingCartHandler}
+              loading={loadings}
+              loadingPosition="end"
             >
-              添加到購物車
-            </Button>
+              <span>添加到購物車</span>
+            </LoadingButton>
+
+            <Modal
+              open={openModal}
+              centered
+              width={600}
+              title="訂單已加入購物車"
+              onCancel={() => {
+                setOpenModal(!openModal);
+                naviagte("/bookingSystem");
+              }}
+              footer={[
+                <div
+                  style={{ display: "flex", justifyContent: "space-evenly" }}
+                >
+                  <Button
+                    component="label"
+                    variant="contained"
+                    style={{
+                      color: "white",
+                      backgroundColor: "#ff7414",
+                      width: "100%",
+                      margin: "0px 10px",
+                    }}
+                    startIcon={<ShoppingCartIcon />}
+                    onClick={() => {
+                      naviagte("/booking/cart");
+                    }}
+                  >
+                    前往購物車
+                  </Button>
+                  <Button
+                    component="label"
+                    variant="contained"
+                    style={{
+                      color: "white",
+                      backgroundColor: "#ff7414",
+                      width: "100%",
+                      margin: "0px 10px",
+                    }}
+                    startIcon={<LocalAtmIcon />}
+                  >
+                    立即付款
+                  </Button>
+                </div>,
+              ]}
+            >
+              <div className="modal-cart">
+                <div
+                  style={{
+                    fontSize: "10px",
+                    color: "orange",
+                    fontWeight: "900",
+                  }}
+                >
+                  項目 #1
+                </div>
+                <div>
+                  <strong>{venueDetails.venueName}</strong>
+                </div>
+                <div>
+                  {venueDetails.venueName} | 容納人數 {venueDetails.nop} |
+                  面積(平方呎){venueDetails.area}{" "}
+                </div>
+                <hr />
+                <div>日期 {dateValue.format("YYYY年MM月DD日")}</div>
+                <hr />
+                <div
+                  style={{ display: "flex", justifyContent: "space-between" }}
+                >
+                  <strong>收費</strong>
+                  <span>
+                    <strong>HK$650</strong>
+                  </span>
+                </div>
+              </div>
+            </Modal>
+
             <Button
               component="label"
               variant="contained"

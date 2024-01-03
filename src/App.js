@@ -19,10 +19,10 @@ import "./App.css";
 import BookingSystem from "./views/bookingSystem/BookingSystem";
 import BookingPage from "./views/bookingSystem/BookingPage";
 import { BookingPageContext } from "./views/bookingSystem/BookingPageContext";
+import BookingCart from "./views/bookingSystem/bookingCart/BookingCart";
 
 function App() {
   const [cartItems, setCartItems] = useState([]);
-
   useEffect(() => {
     if (localStorage.getItem("loginAlert") === "true") {
       notifyLogin();
@@ -82,6 +82,7 @@ function App() {
                 <Route path="/bookingPage" element={<BookingPage />}>
                   <Route path=":id" element={<BookingPage />} />
                 </Route>
+                <Route path="/booking/cart" element={<BookingCart />} />
                 <Route path="/docsList" element={<DocsList />} />
                 <Route path="/userList" element={<UserList />} />
                 <Route path="/userDetails" element={<PersonalProfile />} />

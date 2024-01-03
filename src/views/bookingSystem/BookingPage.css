@@ -1,6 +1,7 @@
 .booking-page-container {
   background-image: url(/src/img/venueBackground.png);
-  height: 100%;
+  background-size: cover;
+  background-attachment: fixed;
   margin: 0 15% 0 15%;
 }
 
@@ -143,4 +144,10 @@
 .item-header {
   display: flex;
   justify-content: space-between;
+}
+
+.modal-cart {
+  font-size: 14px;
+  margin: 20px 0px;
+  line-height: 2;
 }
