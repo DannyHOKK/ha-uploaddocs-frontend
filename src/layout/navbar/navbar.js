@@ -18,11 +18,11 @@ function HaNavbar() {
     if (userDetails) {
       setCurrentUser(true);
       setUser(userDetails);
+      cartLength(userDetails.id);
     } else {
       setCurrentUser(false);
       setUser({});
     }
-    cartLength(userDetails.id);
   }, []);
 
   const cartLength = async (userId) => {

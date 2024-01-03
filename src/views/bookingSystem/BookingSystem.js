@@ -214,7 +214,8 @@ function BookingSystem() {
 
   const getVenueList = async () => {
     const res = await BookingService.getVenueList();
-    setVeune(res.data.data);
+
+    if (res.data.data !== null) setVeune(res.data.data);
   };
 
   const convertVenuePhoto = (photo) => {
