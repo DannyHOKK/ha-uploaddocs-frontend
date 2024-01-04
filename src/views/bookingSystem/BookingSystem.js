@@ -1,4 +1,4 @@
-import { Carousel, DatePicker, Select } from "antd";
+import { Carousel, DatePicker, Form, Input, Modal, Select } from "antd";
 import React, { useEffect, useRef, useState } from "react";
 import slider1 from "../../img/slider1.png";
 import "./BookingSystem.css";
@@ -9,6 +9,8 @@ import ExpandLessIcon from "@mui/icons-material/ExpandLess";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import BookingService from "../../api/BookingService";
 import blobToUrl from "../../utils/blobToUrl";
+import { Button } from "@mui/material";
+import { MDBFile } from "mdb-react-ui-kit";
 
 function BookingSystem() {
   const [filter, setFilter] = useState({
@@ -190,6 +192,7 @@ function BookingSystem() {
   const [open3, setOpen3] = useState(false);
   const [open4, setOpen4] = useState(false);
   const [venue, setVeune] = useState([]);
+  const [createModal, setCreateModal] = useState(false);
 
   let menuRef = useRef();
   let menuRef2 = useRef();
@@ -210,6 +213,10 @@ function BookingSystem() {
       }
     };
     document.addEventListener("mousedown", handler);
+    // Cleanup function to remove the event listener when the component is unmounted
+    return () => {
+      document.removeEventListener("mousedown", handler);
+    };
   }, []);
 
   const getVenueList = async () => {
@@ -222,6 +229,53 @@ function BookingSystem() {
     return URL.createObjectURL(blobToUrl(photo));
   };
 
+  const handleCancel = () => {
+    setCreateModal(!createModal);
+  };
+
+  const [venuePhoto, setVenuePhoto] = useState(null);
+  const [venueInfo, setVenueInfo] = useState({
+    venueName: "",
+    venueCategory: "",
+    nop: "",
+    area: "",
+  });
+
+  const venuePhotoUploadHandler = (e) => {
+    setVenuePhoto(e.target.files[0]);
+  };
+
+  const changeHandler = (e) => {
+    const { name, value } = e.target;
+    setVenueInfo((preVenueInfo) => ({
+      ...preVenueInfo,
+      [name]: value,
+    }));
+    console.log(venueInfo);
+  };
+
+  const venueCategoryHandler = (e) => {
+    setVenueInfo((preVenueInfo) => ({
+      ...preVenueInfo,
+      venueCategory: e,
+    }));
+  };
+
+  const createVenueInfoHandler = async () => {
+    const formData = new FormData();
+    console.log("venueInfo: " + JSON.stringify(venueInfo));
+    console.log("formData: " + formData);
+
+    // Append the venueInfoBlob to FormData
+    for (let key in venueInfo) {
+      formData.append(key, venueInfo[key]);
+    }
+    formData.append("bookingVenue", venuePhoto);
+    const res = await BookingService.createVenue(formData);
+
+    window.location.reload();
+  };
+
   return (
     <>
       <div style={{ margin: "0 15% 0 15%" }}>
@@ -231,7 +285,95 @@ function BookingSystem() {
         <div className="background-image">
           <div className="booking-container">
             <h5>搜尋結果: {} </h5>
+
             <div className="booking-search">
+              <Button
+                variant="contained"
+                onClick={() => {
+                  setCreateModal(!createModal);
+                }}
+              >
+                創建場地
+              </Button>
+              <Modal
+                title="Create Document Form"
+                open={createModal}
+                onCancel={handleCancel}
+                width={800}
+                footer={[
+                  <div
+                    style={{ display: "flex", justifyContent: "space-evenly" }}
+                  >
+                    <Button
+                      component="label"
+                      variant="contained"
+                      style={{
+                        color: "white",
+                        backgroundColor: "#ff7414",
+                        width: "100%",
+                        margin: "0px 30px",
+                      }}
+                      onClick={createVenueInfoHandler}
+                    >
+                      創建場地
+                    </Button>
+                  </div>,
+                ]}
+              >
+                <Form
+                  labelCol={{ span: 6 }}
+                  wrapperCol={{ span: 14 }}
+                  layout="horizontal"
+                  style={{ maxWidth: 500 }}
+                >
+                  <Form.Item label="場地">
+                    <Input
+                      type="text"
+                      id="venueName"
+                      name="venueName"
+                      onChange={changeHandler}
+                    />
+                  </Form.Item>
+                  <Form.Item label="場地種類">
+                    <Select
+                      name="venueCategory"
+                      onChange={venueCategoryHandler}
+                      defaultValue=""
+                    >
+                      <Select.Option value="">請選擇以下其中一個</Select.Option>
+                      <Select.Option value="會議室">會議室</Select.Option>
+                      <Select.Option value="活動室">活動室</Select.Option>
+                      <Select.Option value="演講廳">演講廳</Select.Option>
+                      <Select.Option value="禮堂">禮堂</Select.Option>
+                      <Select.Option value="大堂">大堂</Select.Option>
+                    </Select>
+                  </Form.Item>
+                  <Form.Item label="人數">
+                    <Input
+                      type="text"
+                      id="nop"
+                      name="nop"
+                      onChange={changeHandler}
+                    />
+                  </Form.Item>
+                  <Form.Item label="面積">
+                    <Input
+                      type="text"
+                      id="area"
+                      name="area"
+                      onChange={changeHandler}
+                    />
+                  </Form.Item>
+                  <Form.Item label="Upload">
+                    <MDBFile
+                      id="bookingVenue"
+                      name="bookingVenue"
+                      type="file"
+                      onChange={venuePhotoUploadHandler}
+                    />
+                  </Form.Item>
+                </Form>
+              </Modal>
               <DatePicker
                 style={{
                   width: "160px",

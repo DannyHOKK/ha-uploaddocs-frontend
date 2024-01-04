@@ -34,14 +34,15 @@
 .additional-item {
   margin-top: 15px;
   display: flex;
-  justify-content: start;
+  justify-content: space-between;
 }
 .additional-item-card {
   font-size: 14px;
   background-color: white;
   border: 1px solid orange;
   line-height: 1.8;
-  padding: 10px 140px 10px 20px;
+  padding: 10px 10px 10px 20px;
+  width: 100%;
   margin-right: 20px;
 }
 .additional-item-card p {

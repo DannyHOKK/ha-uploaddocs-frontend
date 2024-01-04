@@ -53,7 +53,6 @@ function UploadDocs() {
 
   const submitHandler = (e) => {
     e.preventDefault();
-    console.log(docsData);
     setLoadings(true);
 
     setTimeout(() => {

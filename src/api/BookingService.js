@@ -19,6 +19,21 @@ const getVenueList = () => {
     });
 };
 
+const createVenue = (veneuInfo) => {
+  return axios
+    .post(API_URL + "/venue/createVenue", veneuInfo, {
+      headers: {
+        Authorization: tokenHeader,
+      },
+    })
+    .then((res) => {
+      return res;
+    })
+    .catch((error) => {
+      return error;
+    });
+};
+
 const getVenue = (venueId) => {
   return axios
     .get(API_URL + `/venue/getVenue?venueId=${venueId}`, {
@@ -65,11 +80,28 @@ const getCart = (userId) => {
     });
 };
 
+const deleteCartById = (cartId) => {
+  return axios
+    .post(API_URL + "/cart/deleteCart?cartId=" + cartId, "", {
+      headers: {
+        Authorization: tokenHeader,
+      },
+    })
+    .then((res) => {
+      return res;
+    })
+    .catch((err) => {
+      return err;
+    });
+};
+
 const BookingService = {
   getVenueList,
   getVenue,
   createCart,
   getCart,
+  deleteCartById,
+  createVenue,
 };
 
 export default BookingService;
