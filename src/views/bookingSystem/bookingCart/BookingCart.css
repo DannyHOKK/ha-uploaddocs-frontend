@@ -1,0 +1,29 @@
+.booking-cart-container {
+  background-image: url(/src/img/venueBackground.png);
+  background-size: cover;
+  background-attachment: fixed;
+
+  margin: 0 15%;
+}
+.booking-cart-layout {
+  text-align: start;
+  margin: 0 10%;
+  padding-top: 50px;
+}
+.booking-cart-card {
+  margin: 30px 0;
+  background-color: white;
+  border: 1px solid #f5dcbd;
+  width: 100%;
+  padding: 20px;
+  line-height: 2;
+}
+.divier {
+  border: 1px solid #f5dcbd;
+  margin: 8px;
+}
+
+.space-between {
+  display: flex;
+  justify-content: space-between;
+}

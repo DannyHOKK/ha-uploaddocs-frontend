@@ -1,4 +1,4 @@
-import { Carousel, DatePicker, Select } from "antd";
+import { Carousel, DatePicker, Form, Input, Modal, Select } from "antd";
 import React, { useEffect, useRef, useState } from "react";
 import slider1 from "../../img/slider1.png";
 import "./BookingSystem.css";
@@ -7,6 +7,10 @@ import dayjs from "dayjs";
 import venue1 from "../../img/venue1.png";
 import ExpandLessIcon from "@mui/icons-material/ExpandLess";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import BookingService from "../../api/BookingService";
+import blobToUrl from "../../utils/blobToUrl";
+import { Button } from "@mui/material";
+import { MDBFile } from "mdb-react-ui-kit";
 
 function BookingSystem() {
   const [filter, setFilter] = useState({
@@ -187,6 +191,8 @@ function BookingSystem() {
   const [open2, setOpen2] = useState(false);
   const [open3, setOpen3] = useState(false);
   const [open4, setOpen4] = useState(false);
+  const [venue, setVeune] = useState([]);
+  const [createModal, setCreateModal] = useState(false);
 
   let menuRef = useRef();
   let menuRef2 = useRef();
@@ -194,8 +200,8 @@ function BookingSystem() {
   let menuRef4 = useRef();
 
   useEffect(() => {
+    getVenueList();
     let handler = (e) => {
-      console.log("big");
       if (!menuRef.current.contains(e.target)) {
         setOpen1(false);
       }
@@ -207,7 +213,68 @@ function BookingSystem() {
       }
     };
     document.addEventListener("mousedown", handler);
+    // Cleanup function to remove the event listener when the component is unmounted
+    return () => {
+      document.removeEventListener("mousedown", handler);
+    };
   }, []);
+
+  const getVenueList = async () => {
+    const res = await BookingService.getVenueList();
+
+    if (res.data.data !== null) setVeune(res.data.data);
+  };
+
+  const convertVenuePhoto = (photo) => {
+    return URL.createObjectURL(blobToUrl(photo));
+  };
+
+  const handleCancel = () => {
+    setCreateModal(!createModal);
+  };
+
+  const [venuePhoto, setVenuePhoto] = useState(null);
+  const [venueInfo, setVenueInfo] = useState({
+    venueName: "",
+    venueCategory: "",
+    nop: "",
+    area: "",
+  });
+
+  const venuePhotoUploadHandler = (e) => {
+    setVenuePhoto(e.target.files[0]);
+  };
+
+  const changeHandler = (e) => {
+    const { name, value } = e.target;
+    setVenueInfo((preVenueInfo) => ({
+      ...preVenueInfo,
+      [name]: value,
+    }));
+    console.log(venueInfo);
+  };
+
+  const venueCategoryHandler = (e) => {
+    setVenueInfo((preVenueInfo) => ({
+      ...preVenueInfo,
+      venueCategory: e,
+    }));
+  };
+
+  const createVenueInfoHandler = async () => {
+    const formData = new FormData();
+    console.log("venueInfo: " + JSON.stringify(venueInfo));
+    console.log("formData: " + formData);
+
+    // Append the venueInfoBlob to FormData
+    for (let key in venueInfo) {
+      formData.append(key, venueInfo[key]);
+    }
+    formData.append("bookingVenue", venuePhoto);
+    const res = await BookingService.createVenue(formData);
+
+    window.location.reload();
+  };
 
   return (
     <>
@@ -218,7 +285,95 @@ function BookingSystem() {
         <div className="background-image">
           <div className="booking-container">
             <h5>搜尋結果: {} </h5>
+
             <div className="booking-search">
+              <Button
+                variant="contained"
+                onClick={() => {
+                  setCreateModal(!createModal);
+                }}
+              >
+                創建場地
+              </Button>
+              <Modal
+                title="Create Document Form"
+                open={createModal}
+                onCancel={handleCancel}
+                width={800}
+                footer={[
+                  <div
+                    style={{ display: "flex", justifyContent: "space-evenly" }}
+                  >
+                    <Button
+                      component="label"
+                      variant="contained"
+                      style={{
+                        color: "white",
+                        backgroundColor: "#ff7414",
+                        width: "100%",
+                        margin: "0px 30px",
+                      }}
+                      onClick={createVenueInfoHandler}
+                    >
+                      創建場地
+                    </Button>
+                  </div>,
+                ]}
+              >
+                <Form
+                  labelCol={{ span: 6 }}
+                  wrapperCol={{ span: 14 }}
+                  layout="horizontal"
+                  style={{ maxWidth: 500 }}
+                >
+                  <Form.Item label="場地">
+                    <Input
+                      type="text"
+                      id="venueName"
+                      name="venueName"
+                      onChange={changeHandler}
+                    />
+                  </Form.Item>
+                  <Form.Item label="場地種類">
+                    <Select
+                      name="venueCategory"
+                      onChange={venueCategoryHandler}
+                      defaultValue=""
+                    >
+                      <Select.Option value="">請選擇以下其中一個</Select.Option>
+                      <Select.Option value="會議室">會議室</Select.Option>
+                      <Select.Option value="活動室">活動室</Select.Option>
+                      <Select.Option value="演講廳">演講廳</Select.Option>
+                      <Select.Option value="禮堂">禮堂</Select.Option>
+                      <Select.Option value="大堂">大堂</Select.Option>
+                    </Select>
+                  </Form.Item>
+                  <Form.Item label="人數">
+                    <Input
+                      type="text"
+                      id="nop"
+                      name="nop"
+                      onChange={changeHandler}
+                    />
+                  </Form.Item>
+                  <Form.Item label="面積">
+                    <Input
+                      type="text"
+                      id="area"
+                      name="area"
+                      onChange={changeHandler}
+                    />
+                  </Form.Item>
+                  <Form.Item label="Upload">
+                    <MDBFile
+                      id="bookingVenue"
+                      name="bookingVenue"
+                      type="file"
+                      onChange={venuePhotoUploadHandler}
+                    />
+                  </Form.Item>
+                </Form>
+              </Modal>
               <DatePicker
                 style={{
                   width: "160px",
@@ -230,7 +385,7 @@ function BookingSystem() {
               <div ref={menuRef}>
                 <ul className={`checkbox-list ${open1 ? "active-border" : ""}`}>
                   <li
-                    tabindex="0"
+                    tabIndex="0"
                     onClick={() => {
                       setOpen1(!open1);
                     }}
@@ -248,27 +403,27 @@ function BookingSystem() {
                         open1 ? "box-active" : "inactive"
                       } `}
                     >
-                      <li tabindex="0">
+                      <li tabIndex="0">
                         <input type="checkbox" id="all" />
                         <label for="all">所有</label>
                       </li>
-                      <li tabindex="0">
+                      <li tabIndex="0">
                         <input type="checkbox" id="venue1" />
                         <label for="venue1">會議室</label>
                       </li>
-                      <li tabindex="0">
+                      <li tabIndex="0">
                         <input type="checkbox" id="venue2" />
                         <label for="venue2">活動室</label>
                       </li>
-                      <li tabindex="0">
+                      <li tabIndex="0">
                         <input type="checkbox" id="venue3" />
                         <label for="venue3">演講廳</label>
                       </li>
-                      <li tabindex="0">
+                      <li tabIndex="0">
                         <input type="checkbox" id="venue4" />
                         <label for="venue4">禮堂</label>
                       </li>
-                      <li tabindex="0">
+                      <li tabIndex="0">
                         <input type="checkbox" id="venue5" />
                         <label for="venue5">大堂</label>
                       </li>
@@ -280,7 +435,7 @@ function BookingSystem() {
               <div ref={menuRef2}>
                 <ul className={`checkbox-list ${open2 ? "active-border" : ""}`}>
                   <li
-                    tabindex="0"
+                    tabIndex="0"
                     onClick={() => {
                       setOpen2(!open2);
                     }}
@@ -298,23 +453,23 @@ function BookingSystem() {
                         open2 ? "box-active" : "inactive"
                       } `}
                     >
-                      <li tabindex="0">
+                      <li tabIndex="0">
                         <input type="checkbox" id="all2" />
                         <label for="all2">所有</label>
                       </li>
-                      <li tabindex="0">
+                      <li tabIndex="0">
                         <input type="checkbox" id="30" />
                         <label for="30"> &lt;30 </label>
                       </li>
-                      <li tabindex="0">
+                      <li tabIndex="0">
                         <input type="checkbox" id="50" />
                         <label for="50">30-50</label>
                       </li>
-                      <li tabindex="0">
+                      <li tabIndex="0">
                         <input type="checkbox" id="100" />
                         <label for="100">50-100</label>
                       </li>
-                      <li tabindex="0">
+                      <li tabIndex="0">
                         <input type="checkbox" id="101" />
                         <label for="101">&gt;100</label>
                       </li>
@@ -326,7 +481,7 @@ function BookingSystem() {
               <div ref={menuRef3}>
                 <ul className={`checkbox-list ${open3 ? "active-border" : ""}`}>
                   <li
-                    tabindex="0"
+                    tabIndex="0"
                     onClick={() => {
                       setOpen3(!open3);
                     }}
@@ -344,35 +499,35 @@ function BookingSystem() {
                         open3 ? "box-active" : "inactive"
                       } `}
                     >
-                      <li tabindex="0">
+                      <li tabIndex="0">
                         <input type="checkbox" id="all3" />
                         <label for="all3">所有</label>
                       </li>
-                      <li tabindex="0">
+                      <li tabIndex="0">
                         <input type="checkbox" id="mon" />
                         <label for="mon">週一</label>
                       </li>
-                      <li tabindex="0">
+                      <li tabIndex="0">
                         <input type="checkbox" id="tue" />
                         <label for="tue">週二</label>
                       </li>
-                      <li tabindex="0">
+                      <li tabIndex="0">
                         <input type="checkbox" id="wed" />
                         <label for="wed">週三</label>
                       </li>
-                      <li tabindex="0">
+                      <li tabIndex="0">
                         <input type="checkbox" id="thr" />
                         <label for="thr">週四</label>
                       </li>
-                      <li tabindex="0">
+                      <li tabIndex="0">
                         <input type="checkbox" id="fri" />
                         <label for="fri">週五</label>
                       </li>
-                      <li tabindex="0">
+                      <li tabIndex="0">
                         <input type="checkbox" id="sat" />
                         <label for="sat">週六</label>
                       </li>
-                      <li tabindex="0">
+                      <li tabIndex="0">
                         <input type="checkbox" id="sun" />
                         <label for="sun">週日</label>
                       </li>
@@ -383,23 +538,23 @@ function BookingSystem() {
             </div>
           </div>
           <div className="venue-card-container">
-            {venueDetails.map((venue, index) => (
-              <a href="/bookingPage">
-                <div className="venue-card">
+            {venue.map((venue) => (
+              <div className="venue-card">
+                <a href={"/bookingPage/" + venue.id}>
                   <div>
-                    <img src={venue1} />
+                    <img src={convertVenuePhoto(venue.photo)} />
                   </div>
                   <div className="venue-card-text">
                     <h6>
                       <strong>{venue.venueName}</strong>
                     </h6>
                     <p>
-                      容納人數: {venue.headCount} <br />
+                      容納人數: {venue.nop} <br />
                       面積(平方呎): {venue.area}
                     </p>
                   </div>
-                </div>
-              </a>
+                </a>
+              </div>
             ))}
           </div>
         </div>
