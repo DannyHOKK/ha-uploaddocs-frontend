@@ -1,7 +1,7 @@
 import axios from "axios";
 import AuthService from "./AuthService";
 
-const API_URL = "http://localhost:8080/booking";
+const API_URL = "http://34.150.90.28:8080/booking";
 const tokenHeader = AuthService.AuthHeader();
 
 const getVenueList = () => {
