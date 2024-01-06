@@ -1,7 +1,7 @@
 import axios from "axios";
 import AuthService from "./AuthService";
 
-const API_URL = "https://34.150.90.28:8443/api/user";
+const API_URL = "https://dannyhkk.site:8443/api/user";
 const tokenHeader = AuthService.AuthHeader();
 
 const getUser = (userid) => {
