@@ -1,7 +1,7 @@
 import axios from "axios";
 import AuthService from "./AuthService";
 
-const API_URL = "http://34.150.90.28:8080/api/docs";
+const API_URL = "https://34.150.90.28:8443/api/docs";
 const tokenHeader = AuthService.AuthHeader();
 
 const uploadDocs = (formData) => {
