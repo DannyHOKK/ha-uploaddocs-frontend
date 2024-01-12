@@ -20,6 +20,7 @@ import BookingSystem from "./views/bookingSystem/BookingSystem";
 import BookingPage from "./views/bookingSystem/BookingPage";
 import { BookingPageContext } from "./views/bookingSystem/BookingPageContext";
 import BookingCart from "./views/bookingSystem/bookingCart/BookingCart";
+import Introduction from "./views/Introduction";
 
 function App() {
   const [cartItems, setCartItems] = useState([]);
@@ -97,6 +98,7 @@ function App() {
                   checkAuthenticated() ? <Navigate to="/" /> : <LoginRegister />
                 }
               />
+              <Route path="introduction" element={<Introduction />} />
 
               <Route
                 path="/*"

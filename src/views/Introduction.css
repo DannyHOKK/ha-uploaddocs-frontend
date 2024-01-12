@@ -1,0 +1,73 @@
+@import url("https://fonts.googleapis.com/css2?family=Exo+2:wght@300&display=swap");
+
+.intro-container {
+  background-image: url(/src/img/introBackground.jpg);
+  background-attachment: fixed;
+  background-size: cover;
+  height: 100vh;
+  font-family: "Exo 2", sans-serif;
+}
+
+.intro-context {
+  padding: 40px 10%;
+}
+
+.intro-img-container {
+  margin: 50px 0;
+  display: flex;
+  justify-content: space-evenly;
+}
+.intro-img-container img {
+  width: 170px;
+}
+
+.content-card {
+  margin: 40px;
+}
+.content-card div:first-child {
+  font-weight: 900;
+  font-size: 40px;
+  margin: 20px 0;
+}
+.content-card div:nth-child(2) {
+  font-size: 18px;
+  font-family: Poppins, sans-serif;
+}
+
+.feature-container {
+  position: relative;
+  display: flex;
+  margin: 50px 5%;
+  justify-content: space-between;
+}
+
+.feature-card {
+  position: relative;
+  width: 340px;
+  height: 100%;
+}
+.feature-card-body:hover {
+  position: absolute;
+  top: -20px;
+  opacity: 1;
+}
+
+.feature-card-body {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  height: 200px;
+  width: 100%;
+  padding: 20px;
+  background-color: white;
+  border: 1px solid grey;
+  border-radius: 4px;
+  top: 0;
+  opacity: 0.4;
+  transition: 1s;
+}
+.feature-card-body div:first-child {
+  font-weight: 900;
+  font-size: 20px;
+}

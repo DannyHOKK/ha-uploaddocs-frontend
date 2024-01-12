@@ -11,7 +11,7 @@ const PrivateRoute = () => {
     }
   };
 
-  return checkAuthenticated() ? <Outlet /> : <Navigate to="/login" />;
+  return checkAuthenticated() ? <Outlet /> : <Navigate to="/introduction" />;
 };
 
 export default PrivateRoute;

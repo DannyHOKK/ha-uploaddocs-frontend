@@ -17,6 +17,7 @@ function DocsList() {
     remark: "",
   });
   const [showDelete, setShowDelete] = useState(false);
+  const [loading, setLoading] = useState(false);
   const { RangePicker } = DatePicker;
 
   useEffect(() => {
@@ -25,6 +26,7 @@ function DocsList() {
   }, []);
 
   const loadUserList = async () => {
+    setLoading(true);
     const res = await UserService.getUserList();
 
     // UserService.getUserList()
@@ -35,7 +37,11 @@ function DocsList() {
     //     console.log(err);
     //   });
 
-    if (res) setUserList(res.data.data);
+    if (res) {
+      setUserList(res.data.data);
+      setLoading(false);
+      console.log("hihi");
+    }
 
     console.log(res.data.data);
   };
@@ -335,7 +341,7 @@ function DocsList() {
               <Select
                 name="category"
                 onChange={categoryHandler}
-                defaultValue=""
+                initialValues=""
               >
                 <Select.Option value="">All</Select.Option>
                 <Select.Option value="pdf">pdf</Select.Option>
@@ -357,7 +363,7 @@ function DocsList() {
                 id="createBy"
                 name="createBy"
                 onChange={createByHandler}
-                defaultValue=""
+                initialValues=""
               >
                 <Select.Option value="">All User</Select.Option>
                 {userList.map((user, index) => (
@@ -412,6 +418,7 @@ function DocsList() {
           <Table
             columns={columns}
             dataSource={docsList}
+            loading={loading}
             scroll={{
               x: 1000,
             }}

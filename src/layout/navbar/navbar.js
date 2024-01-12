@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import WORD_IMAGE from "../../img/word_image.png";
+import HKUST_ICON from "../../img/hkust_icon.png";
 import "react-toastify/dist/ReactToastify.css";
 import { useAuth } from "../../api/AuthContext";
 import { DarkMode } from "../../views/DarkMode";
@@ -40,9 +40,12 @@ function HaNavbar() {
     <nav className="navbar flex-lg-column navbar-expand-lg navbar-light">
       <div className="container-fluid justify-content-between">
         <div className=" navbar-brand">
-          <a className="navbar-brand " href="#">
-            <img src={WORD_IMAGE} alt="" width="40" />
-            File Upload Application
+          <a
+            className="navbar-brand "
+            href="/introduction"
+            style={{ marginLeft: "20px" }}
+          >
+            <img src={HKUST_ICON} alt="" width="150" />
           </a>
         </div>
 
@@ -63,27 +66,32 @@ function HaNavbar() {
         >
           <ul className="navbar-nav ml-auto">
             <li className="nav-item px-2">
-              <a className="nav-link active" aria-current="page" href="#">
+              <a
+                className="nav-link active"
+                aria-current="page"
+                href="/introduction"
+              >
                 Home
               </a>
             </li>
-            <li className="nav-item px-2">
-              <a className="nav-link" href="/bookingSystem">
-                Booking System
-              </a>
-            </li>
-            <li className="nav-item px-2">
-              <a className="nav-link" href="/docsList">
-                Docs List
-              </a>
-            </li>
-            <li className="nav-item px-2">
-              <a className="nav-link" href="/userList">
-                User List
-              </a>
-            </li>
+
             {currentUser ? (
               <>
+                <li className="nav-item px-2">
+                  <a className="nav-link" href="/bookingSystem">
+                    Booking System
+                  </a>
+                </li>
+                <li className="nav-item px-2">
+                  <a className="nav-link" href="/docsList">
+                    Docs List
+                  </a>
+                </li>
+                <li className="nav-item px-2">
+                  <a className="nav-link" href="/userList">
+                    User List
+                  </a>
+                </li>
                 <li className="nav-item px-2">
                   <a className="nav-link" href="/userDetails">
                     {user.username}
@@ -109,7 +117,17 @@ function HaNavbar() {
                 </li>
               </>
             ) : (
-              <div></div>
+              <>
+                <li className="nav-item px-2">
+                  <a
+                    className="nav-link active"
+                    aria-current="page"
+                    href="/login"
+                  >
+                    Sign in
+                  </a>
+                </li>
+              </>
             )}
           </ul>
         </div>

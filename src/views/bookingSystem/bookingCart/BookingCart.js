@@ -7,6 +7,11 @@ import { Divider } from "antd";
 import LocalAtmIcon from "@mui/icons-material/LocalAtm";
 import EventNoteIcon from "@mui/icons-material/EventNote";
 
+// const Testing = (props) => {
+//   const { item } = props;
+//   return <>{console.log(item.item1)}</>;
+// };
+
 const BookingCart = () => {
   const [bookingCart, setBookingCart] = useState([]);
   const theme = createTheme({
@@ -27,7 +32,6 @@ const BookingCart = () => {
   const cartDetailsUpdate = async (userId) => {
     const res = await BookingService.getCart(userId);
     setBookingCart(res.data.data);
-    console.log(bookingCart);
   };
 
   const cancelBookingHandler = async (cartId) => {
@@ -44,7 +48,8 @@ const BookingCart = () => {
 
           {bookingCart.map((item, index) => (
             <>
-              <div className="booking-cart-card">
+              {console.log(item)}
+              <div key={index} className="booking-cart-card">
                 <div style={{ color: "#FF7414", fontSize: "10px" }}>
                   項目 #{index + 1}
                 </div>
@@ -58,7 +63,17 @@ const BookingCart = () => {
                 <hr className="divier" />
                 <div>日期 {item.bookingDate}</div>
                 <hr className="divier" />
-
+                {Object.keys(item.bookingItem).map((keys) => (
+                  <p key={keys}>
+                    {item.bookingItem[keys] > 0 ? (
+                      <>
+                        {keys}: {item.bookingItem[keys]}
+                      </>
+                    ) : (
+                      <></>
+                    )}
+                  </p>
+                ))}
                 <div
                   style={{ display: "flex", justifyContent: "space-between" }}
                 >
