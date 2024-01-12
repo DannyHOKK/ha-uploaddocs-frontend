@@ -4,7 +4,7 @@
   background-image: url(/src/img/introBackground.jpg);
   background-attachment: fixed;
   background-size: cover;
-  height: 100vh;
+  min-height: 100vh;
   font-family: "Exo 2", sans-serif;
 }
 
@@ -39,6 +39,7 @@
   display: flex;
   margin: 50px 5%;
   justify-content: space-between;
+  height: 200px;
 }
 
 .feature-card {

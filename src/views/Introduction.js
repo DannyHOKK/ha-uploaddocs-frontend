@@ -49,6 +49,14 @@ const Introduction = () => {
           </div>
         </div>
       </div>
+      <h1>
+        <strong>Login Account</strong>
+      </h1>
+      <br />
+      <strong>
+        <p>Account: admin</p>
+        <p>Password: Aa!123123</p>
+      </strong>
     </div>
   );
 };
